@@ -1,0 +1,8 @@
+api:
+  enable_auth: false
+#  basic_auth_user:
+#  basic_auth_password:
+
+mongodb:
+  connection_string: mongodb://localhost:8100
+  database: push-api
