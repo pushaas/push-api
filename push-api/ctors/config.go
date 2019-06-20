@@ -1,11 +1,11 @@
 package ctors
 
 import (
+	"errors"
 	"fmt"
 	"os"
 	"strings"
 
-	"github.com/go-siris/siris/core/errors"
 	"github.com/spf13/viper"
 )
 
@@ -27,19 +27,20 @@ func setupFromDefaults(config *viper.Viper, env string) {
 	config.Set("env", env)
 
 	/*
-		server
+		api
 	*/
 	config.SetDefault("api.enable_auth", true)
 
 	/*
-		mongodb
+		redis
 	*/
-	config.SetDefault("mongodb.database", "push-api")
+	config.SetDefault("redis.pubsub.channels", "channels")
+	config.SetDefault("redis.pubsub.messages", "messages")
 
 	/*
 		server
 	*/
-	config.SetDefault("server.port", "8000")
+	config.SetDefault("server.port", "8080")
 }
 
 func setupFromConfigurationFile(config *viper.Viper, env string) error {

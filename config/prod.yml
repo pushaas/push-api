@@ -1,8 +1,8 @@
 api:
-  enable_auth: false
+  enable_auth: true
 #  basic_auth_user:
 #  basic_auth_password:
 
-mongodb:
-#  connection_string: mongodb://push-api-mongo.tsuru:27017
-  database: push-api
+#redis:
+#  address:
+#  password:

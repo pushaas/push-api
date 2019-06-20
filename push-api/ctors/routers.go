@@ -6,6 +6,7 @@ import (
 	"go.uber.org/zap"
 
 	"github.com/rafaeleyng/push-api/push-api/routers/apiV1"
+	"github.com/rafaeleyng/push-api/push-api/services"
 
 	"github.com/rafaeleyng/push-api/push-api/routers"
 )
@@ -46,6 +47,7 @@ func NewRouter(
 	staticRouter routers.StaticRouter,
 	apiRootRouter routers.ApiRootRouter,
 	v1ChannelsRouter apiV1.ChannelsRouter,
+	v1MessagesRouter apiV1.MessagesRouter,
 ) *gin.Engine {
 	envConfig := config.Get("env")
 	if envConfig == "prod" {
@@ -70,8 +72,12 @@ func NewRouter(
 		})
 
 		g(r, "/v1", func(r gin.IRouter) {
-			g(r, "/resources", func(r gin.IRouter) {
+			g(r, "/channels", func(r gin.IRouter) {
 				v1ChannelsRouter.SetupRoutes(r)
+			})
+
+			g(r, "/messages", func(r gin.IRouter) {
+				v1MessagesRouter.SetupRoutes(r)
 			})
 		})
 	})
@@ -91,6 +97,10 @@ func NewApiRootRouter() routers.ApiRootRouter {
 	return routers.NewApiRootRouter()
 }
 
-func NewChannelsRouter() apiV1.ChannelsRouter {
-	return apiV1.NewChannelsRouter()
+func NewChannelsRouter(channelService services.ChannelService) apiV1.ChannelsRouter {
+	return apiV1.NewChannelsRouter(channelService)
+}
+
+func NewMessagesRouter(publicationService services.PublicationService) apiV1.MessagesRouter {
+	return apiV1.NewMessagesRouter(publicationService)
 }

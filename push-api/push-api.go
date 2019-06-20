@@ -21,7 +21,7 @@ func Run() {
 		fx.Provide(
 			ctors.NewViper,
 			ctors.NewLogger,
-			ctors.NewMongodb,
+			ctors.NewRedis,
 
 			// routers
 			ctors.NewRouter,
@@ -29,8 +29,11 @@ func Run() {
 			ctors.NewStaticRouter,
 			ctors.NewApiRootRouter,
 			ctors.NewChannelsRouter,
+			ctors.NewMessagesRouter,
 
 			// services
+			ctors.NewChannelService,
+			ctors.NewPublicationService,
 		),
 		fx.Invoke(runApp),
 	)

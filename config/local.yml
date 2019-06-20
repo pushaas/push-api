@@ -3,6 +3,6 @@ api:
 #  basic_auth_user:
 #  basic_auth_password:
 
-mongodb:
-  connection_string: mongodb://localhost:8100
-  database: push-api
+redis:
+  address: "localhost:6380"
+  password: ""

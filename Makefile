@@ -57,19 +57,3 @@ docker-build-and-run-prod: docker-build-prod docker-run-prod
 docker-push-prod: docker-build-prod
 	@docker push \
 		rafaeleyng/push-api
-
-########################################
-# services
-########################################
-services-up:
-	@docker-compose up -d
-
-services-down:
-	@docker-compose down
-
-mongo-express:
-	docker run -it --rm \
-		--network push-api_default \
-		--name mongo-express \
-		-p 8081:8081 \
-		mongo-express
