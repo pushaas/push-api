@@ -5,7 +5,6 @@ import (
 	"fmt"
 
 	"github.com/go-redis/redis"
-	"github.com/spf13/viper"
 	"go.uber.org/zap"
 
 	"github.com/rafaeleyng/push-api/push-api/models"
@@ -19,11 +18,11 @@ type (
 	ChannelService interface {
 		Create(channel *models.Channel) ChannelCreationResult
 		Get(id string) (*models.Channel, ChannelRetrievalResult)
+		GetAll() ([]*models.Channel, ChannelRetrievalResult)
 		Delete(id string) ChannelDeletionResult
 	}
 
 	channelService struct{
-		config *viper.Viper
 		logger *zap.Logger
 		redisClient redis.UniversalClient
 	}
@@ -73,6 +72,7 @@ func (s *channelService) Create(channel *models.Channel) ChannelCreationResult {
 		return ChannelCreationFailure
 	}
 
+	s.logger.Debug("created channel", zap.Any("channel", channel))
 	return ChannelCreationSuccess
 }
 
@@ -92,7 +92,44 @@ func (s *channelService) Get(id string) (*models.Channel, ChannelRetrievalResult
 		return nil, ChannelRetrievalFailure
 	}
 
+	s.logger.Debug("retrieved channel", zap.Any("channel", channel))
 	return &channel, ChannelRetrievalSuccess
+}
+
+func (s *channelService) GetAll() ([]*models.Channel, ChannelRetrievalResult) {
+	key := channelKey("*")
+
+	var keys []string
+	iterator := s.redisClient.Scan(0, key, 10).Iterator()
+	for iterator.Next() {
+		keys = append(keys, iterator.Val())
+	}
+
+	if err := iterator.Err(); err != nil {
+		s.logger.Error("error while retrieving iterating all channels", zap.Error(err))
+		return nil, ChannelRetrievalFailure
+	}
+
+	results, err := s.redisClient.MGet(keys...).Result()
+	if err != nil {
+		s.logger.Error("error while retrieving all channels", zap.Error(err))
+		return nil, ChannelRetrievalFailure
+	}
+
+	channels := make([]*models.Channel, len(results))
+	for i, v := range results {
+		var channel models.Channel
+		if strValue, ok := v.(string); ok {
+			err = json.Unmarshal([]byte(strValue), &channel)
+			if err != nil {
+				s.logger.Error("error while unmarshalling all channels", zap.String("value", strValue), zap.Error(err))
+				return nil, ChannelRetrievalFailure
+			}
+			channels[i] = &channel
+		}
+	}
+
+	return channels, ChannelRetrievalSuccess
 }
 
 func (s *channelService) Delete(id string) ChannelDeletionResult {
@@ -109,13 +146,12 @@ func (s *channelService) Delete(id string) ChannelDeletionResult {
 		return ChannelDeletionNotFound
 	}
 
+	s.logger.Debug("deleted channel", zap.String("id", id))
 	return ChannelDeletionSuccess
 }
 
-
-func NewChannelService(config *viper.Viper, logger *zap.Logger, redisClient redis.UniversalClient) ChannelService {
+func NewChannelService(logger *zap.Logger, redisClient redis.UniversalClient) ChannelService {
 	return &channelService{
-		config: config,
 		logger: logger.Named("channelService"),
 		redisClient: redisClient,
 	}

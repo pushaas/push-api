@@ -32,6 +32,11 @@ func setupFromDefaults(config *viper.Viper, env string) {
 	config.SetDefault("api.enable_auth", true)
 
 	/*
+		api
+	*/
+	config.SetDefault("app.persistent_channels.revive_enabled", true)
+
+	/*
 		redis
 	*/
 	config.SetDefault("redis.pubsub.channels", "channels")

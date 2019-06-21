@@ -8,11 +8,13 @@ import (
 	"go.uber.org/fx"
 
 	"github.com/rafaeleyng/push-api/push-api/ctors"
+	"github.com/rafaeleyng/push-api/push-api/services"
 )
 
-func runApp(router *gin.Engine, config *viper.Viper) error {
-	port := config.GetString("server.port")
-	err := router.Run(fmt.Sprintf(":%s", port))
+func runApp(router *gin.Engine, config *viper.Viper, persistentChannelService services.PersistentChannelService) error {
+	persistentChannelService.DispatchWorker()
+
+	err := router.Run(fmt.Sprintf(":%s", config.GetString("server.port")))
 	return err
 }
 
@@ -33,6 +35,7 @@ func Run() {
 
 			// services
 			ctors.NewChannelService,
+			ctors.NewPersistentChannelService,
 			ctors.NewPublicationService,
 		),
 		fx.Invoke(runApp),
