@@ -70,7 +70,8 @@ func (s *channelService) Create(channel *models.Channel) ChannelCreationResult {
 		return ChannelCreationFailure
 	}
 
-	err = s.redisClient.Set(key, value, channel.Ttl).Err()
+	expiration := channel.Ttl * time.Second
+	err = s.redisClient.Set(key, value, expiration).Err()
 	if err != nil {
 		s.logger.Error("error while saving channel", zap.String("key", key), zap.String("channel", channel.Id), zap.Error(err))
 		return ChannelCreationFailure
@@ -112,6 +113,10 @@ func (s *channelService) GetAll() ([]*models.Channel, ChannelRetrievalResult) {
 	if err := iterator.Err(); err != nil {
 		s.logger.Error("error while retrieving iterating all channels", zap.Error(err))
 		return nil, ChannelRetrievalFailure
+	}
+
+	if len(keys) == 0 {
+		return make([]*models.Channel, 0), ChannelRetrievalSuccess
 	}
 
 	results, err := s.redisClient.MGet(keys...).Result()
