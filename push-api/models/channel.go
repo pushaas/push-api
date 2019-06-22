@@ -8,5 +8,6 @@ type (
 	Channel struct {
 		Id string `json:"id"`
 		Ttl time.Duration `json:"ttl"`
+		Created time.Time `json:"created"`
 	}
 )

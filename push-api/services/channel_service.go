@@ -3,6 +3,7 @@ package services
 import (
 	"encoding/json"
 	"fmt"
+	"time"
 
 	"github.com/go-redis/redis"
 	"go.uber.org/zap"
@@ -58,6 +59,9 @@ func (s *channelService) Create(channel *models.Channel) ChannelCreationResult {
 	if result == ChannelRetrievalSuccess {
 		return ChannelCreationAlreadyExist
 	}
+
+	now := time.Now()
+	channel.Created = now.UTC()
 
 	key := channelKey(channel.Id)
 	value, err := json.Marshal(channel)
