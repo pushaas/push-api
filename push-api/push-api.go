@@ -23,7 +23,8 @@ func Run() {
 		fx.Provide(
 			ctors.NewViper,
 			ctors.NewLogger,
-			ctors.NewRedis,
+			ctors.NewRedisClient,
+			ctors.NewMachineryServer,
 
 			// routers
 			ctors.NewRouter,

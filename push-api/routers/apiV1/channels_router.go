@@ -107,7 +107,6 @@ func (r *channelsRouter) deleteChannel(c *gin.Context) {
 }
 
 func (r *channelsRouter) getChannels(c *gin.Context) {
-	// TODO
 	channels, result := r.channelService.GetAll()
 
 	if result == services.ChannelRetrievalFailure {
@@ -121,7 +120,7 @@ func (r *channelsRouter) getChannels(c *gin.Context) {
 }
 
 func (r *channelsRouter) getChannelStats(c *gin.Context) {
-	// TODO
+	// TODO implement
 }
 
 func (r *channelsRouter) SetupRoutes(router gin.IRouter) {

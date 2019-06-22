@@ -15,7 +15,7 @@ type (
 	}
 
 	persistentChannelService struct {
-		config *viper.Viper
+		enabled bool
 		logger *zap.Logger
 		publicationService PublicationService
 		channelService ChannelService
@@ -68,16 +68,16 @@ func (s *persistentChannelService) runWorker() {
 }
 
 func (s *persistentChannelService) DispatchWorker() {
-	enabled := s.config.GetBool("app.persistent_channels.revive_enabled")
-
-	if enabled {
+	if s.enabled {
 		go s.runWorker()
 	}
 }
 
 func NewPersistentChannelService(config *viper.Viper, logger *zap.Logger, publicationService PublicationService, channelService ChannelService) PersistentChannelService {
+	enabled := config.GetBool("app.persistent_channels.revive_enabled")
+
 	return &persistentChannelService{
-		config: config,
+		enabled: enabled,
 		logger: logger.Named("persistentChannelService"),
 		publicationService: publicationService,
 		channelService: channelService,

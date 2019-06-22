@@ -3,7 +3,8 @@ package services
 import (
 	"encoding/json"
 
-	"github.com/go-redis/redis"
+	"github.com/RichardKnop/machinery/v1"
+	"github.com/RichardKnop/machinery/v1/tasks"
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
 
@@ -18,9 +19,9 @@ type (
 	}
 
 	publicationService struct{
-		config *viper.Viper
 		logger *zap.Logger
-		redisClient redis.UniversalClient
+		machineryServer *machinery.Server
+		taskName string
 	}
 )
 
@@ -30,32 +31,41 @@ const (
 	PublishingFailure
 )
 
-func (s *publicationService) PublishMessage(message *models.Message) PublishingResult {
-	channel := s.config.GetString("redis.pubsub.messages")
+func (s *publicationService) buildTaskSignature(messageJson *string) *tasks.Signature {
+	return &tasks.Signature{
+		Name: s.taskName,
+		Args: []tasks.Arg{
+			{
+				Type:  "string",
+				Value: *messageJson,
+			},
+		},
+	}
+}
 
+func (s *publicationService) PublishMessage(message *models.Message) PublishingResult {
 	bytes, err := json.Marshal(message)
 	if err != nil {
 		s.logger.Error("error marshaling message", zap.Any("message", message), zap.Error(err))
 		return PublishingInvalid
 	}
 	messageJson := string(bytes)
+	signature := s.buildTaskSignature(&messageJson)
 
-	// TODO analyze whether val can be greater than 1
-	val, err := s.redisClient.Publish(channel, messageJson).Result()
-
-	if err == redis.Nil || err != nil {
+	_, err = s.machineryServer.SendTask(signature)
+	if err != nil {
 		s.logger.Error("error publishing message", zap.Any("message", message), zap.Error(err))
 		return PublishingFailure
 	}
 
-	s.logger.Debug("message published", zap.Int64("val", val), zap.Any("message", message))
+	s.logger.Debug("message published", zap.Any("message", message))
 	return PublishingSuccess
 }
 
-func NewPublicationService(config *viper.Viper, logger *zap.Logger, redisClient redis.UniversalClient) PublicationService {
+func NewPublicationService(config *viper.Viper, logger *zap.Logger, machineryServer *machinery.Server) PublicationService {
 	return &publicationService{
-		config: config,
 		logger: logger.Named("publicationService"),
-		redisClient: redisClient,
+		machineryServer: machineryServer,
+		taskName: config.GetString("redis.pubsub.publish_task"),
 	}
 }

@@ -26,24 +26,16 @@ func getEnvVariable() (string, error) {
 func setupFromDefaults(config *viper.Viper, env string) {
 	config.Set("env", env)
 
-	/*
-		api
-	*/
+	// api
 	config.SetDefault("api.enable_auth", true)
 
-	/*
-		api
-	*/
+	// app
 	config.SetDefault("app.persistent_channels.revive_enabled", true)
 
-	/*
-		redis
-	*/
-	config.SetDefault("redis.pubsub.messages", "messages")
+	// redis
+	config.Set("redis.pubsub.publish_task", "publish")
 
-	/*
-		server
-	*/
+	// server
 	config.SetDefault("server.port", "8080")
 }
 
