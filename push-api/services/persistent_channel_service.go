@@ -39,6 +39,7 @@ func (s *persistentChannelService) revivePersistentChannels() {
 	s.logger.Debug("reviving persistent channels")
 
 	// TODO evolve to use pipeline and send all commands at once
+	// TODO or even better, send a single message with all the channels in the array
 	for _, channel := range channels {
 		s.revivePersistentChannel(channel)
 	}

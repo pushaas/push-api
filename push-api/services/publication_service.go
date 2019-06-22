@@ -25,22 +25,20 @@ type (
 const (
 	MessagePublishingSuccess MessagePublishingResult = iota
 	MessagePublishingFailure
-	// TODO maybe add a MessagePublishingChannelNotFound
 )
 
-// TODO support array of channel aids on `message`
 func (s *publicationService) PublishMessage(message *models.Message) MessagePublishingResult {
-	channel := s.config.GetString("redis.channels.messages") // TODO probably we won't have this single channel
+	channel := s.config.GetString("redis.pubsub.messages")
 
 	// TODO analyze whether val can be greater than 1
-	_, err := s.redisClient.Publish(channel, message.Content).Result()
+	val, err := s.redisClient.Publish(channel, message.Content).Result()
 
 	if err == redis.Nil || err != nil {
 		s.logger.Error("error publishing message", zap.Any("message", message), zap.Error(err))
 		return MessagePublishingFailure
 	}
 
-	s.logger.Debug("message published", zap.Any("message", message))
+	s.logger.Debug("message published", zap.Int64("val", val), zap.Any("message", message))
 	return MessagePublishingSuccess
 }
 
