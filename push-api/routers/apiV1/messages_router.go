@@ -41,10 +41,18 @@ func (r *messagesRouter) postMessage(c *gin.Context) {
 
 	result := r.publicationService.PublishMessage(message)
 
-	if result == services.MessagePublishingFailure {
+	if result == services.PublishingFailure {
 		c.JSON(http.StatusInternalServerError, models.Error{
 			// TODO add remaining fields
 			Message: "could not send message",
+		})
+		return
+	}
+
+	if result == services.PublishingInvalid {
+		c.JSON(http.StatusBadRequest, models.Error{
+			// TODO add remaining fields
+			Message: "invalid message format",
 		})
 		return
 	}

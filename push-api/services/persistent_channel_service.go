@@ -22,30 +22,36 @@ type (
 	}
 )
 
-func (s *persistentChannelService) revivePersistentChannel(channel *models.Channel) {
-	s.publicationService.PublishMessage(&models.Message{
-		Channels: []string{channel.Id},
-		Content: "ping",
-	})
-}
-
 func (s *persistentChannelService) revivePersistentChannels() {
-	channels, result := s.channelService.GetAll()
-	if result != ChannelRetrievalSuccess {
+	channels, channelResult := s.channelService.GetAll()
+	if channelResult != ChannelRetrievalSuccess {
 		s.logger.Error("failed to retrieve persistent channels to revive")
 		return
 	}
 
 	s.logger.Debug("reviving persistent channels")
+	channelsIds := make([]string, len(channels))
 
-	// TODO evolve to use pipeline and send all commands at once
-	// TODO or even better, send a single message with all the channels in the array
-	for _, channel := range channels {
-		s.revivePersistentChannel(channel)
+	for i, channel := range channels {
+		channelsIds[i] = channel.Id
 	}
+
+	messageResult := s.publicationService.PublishMessage(&models.Message{
+		Channels: channelsIds,
+		Content:  "ping",
+	})
+
+	if messageResult == PublishingFailure {
+		s.logger.Error("failed to revive persistent channels")
+	}
+
+	s.logger.Debug("did revive persistent channels")
 }
 
 func (s *persistentChannelService) runWorker() {
+	// run once right away
+	go s.revivePersistentChannels()
+
 	// thanks https://stackoverflow.com/a/16466581/1717979
 	ticker := time.NewTicker(time.Minute)
 	// TODO close quit channel on app shutdown

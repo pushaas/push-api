@@ -1,6 +1,8 @@
 package services
 
 import (
+	"encoding/json"
+
 	"github.com/go-redis/redis"
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
@@ -9,10 +11,10 @@ import (
 )
 
 type (
-	MessagePublishingResult int
+	PublishingResult int
 
 	PublicationService interface {
-		PublishMessage(*models.Message) MessagePublishingResult
+		PublishMessage(*models.Message) PublishingResult
 	}
 
 	publicationService struct{
@@ -23,23 +25,31 @@ type (
 )
 
 const (
-	MessagePublishingSuccess MessagePublishingResult = iota
-	MessagePublishingFailure
+	PublishingSuccess PublishingResult = iota
+	PublishingInvalid
+	PublishingFailure
 )
 
-func (s *publicationService) PublishMessage(message *models.Message) MessagePublishingResult {
+func (s *publicationService) PublishMessage(message *models.Message) PublishingResult {
 	channel := s.config.GetString("redis.pubsub.messages")
 
+	bytes, err := json.Marshal(message)
+	if err != nil {
+		s.logger.Error("error marshaling message", zap.Any("message", message), zap.Error(err))
+		return PublishingInvalid
+	}
+	messageJson := string(bytes)
+
 	// TODO analyze whether val can be greater than 1
-	val, err := s.redisClient.Publish(channel, message.Content).Result()
+	val, err := s.redisClient.Publish(channel, messageJson).Result()
 
 	if err == redis.Nil || err != nil {
 		s.logger.Error("error publishing message", zap.Any("message", message), zap.Error(err))
-		return MessagePublishingFailure
+		return PublishingFailure
 	}
 
 	s.logger.Debug("message published", zap.Int64("val", val), zap.Any("message", message))
-	return MessagePublishingSuccess
+	return PublishingSuccess
 }
 
 func NewPublicationService(config *viper.Viper, logger *zap.Logger, redisClient redis.UniversalClient) PublicationService {
