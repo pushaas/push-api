@@ -4,6 +4,8 @@ import (
 	"context"
 	"time"
 
+	"github.com/bsm/redis-lock"
+	"github.com/go-redis/redis"
 	"github.com/spf13/viper"
 	"go.uber.org/fx"
 	"go.uber.org/zap"
@@ -18,53 +20,79 @@ type (
 
 	persistentChannelsWorker struct {
 		enabled bool
-		logger *zap.Logger
 		interval time.Duration
+		lockKey string
+		lockTimeout time.Duration
+		logger *zap.Logger
 		persistentChannelService services.PersistentChannelService
 		quitChan chan struct{}
+		redisClient redis.UniversalClient
 	}
 )
 
-// thanks https://stackoverflow.com/a/16466581/1717979
-func (s *persistentChannelsWorker) startWorker() {
-	// run once right away
-	go s.persistentChannelService.TriggerRevivePersistentChannels()
+func (w *persistentChannelsWorker) performAction() {
+	options := &lock.Options{
+		LockTimeout: w.lockTimeout,
+	}
+	_, err := lock.Obtain(w.redisClient, w.lockKey, options)
 
-	ticker := time.NewTicker(s.interval)
-	s.quitChan = make(chan struct{})
+	if err == lock.ErrLockNotObtained {
+		w.logger.Debug("could not obtain lock")
+		return
+	}
+
+	if err != nil {
+		w.logger.Error("error while trying to obtain lock", zap.Error(err))
+		return
+	}
+
+	go w.persistentChannelService.TriggerRevivePersistentChannels()
+}
+
+// thanks https://stackoverflow.com/a/16466581/1717979
+func (w *persistentChannelsWorker) startWorker() {
+	w.performAction() // run once right away
+
+	ticker := time.NewTicker(w.interval)
 	for {
 		select {
 		case <- ticker.C:
-			go s.persistentChannelService.TriggerRevivePersistentChannels()
-		case <- s.quitChan:
-			s.quitChan = nil
+			w.performAction()
+		case <- w.quitChan:
+			w.quitChan = nil
 			ticker.Stop()
 			return
 		}
 	}
 }
 
-func (s *persistentChannelsWorker) stopWorker() {
-	if s.quitChan != nil {
-		s.quitChan <- struct{}{}
+func (w *persistentChannelsWorker) stopWorker() {
+	if w.quitChan != nil {
+		w.quitChan <- struct{}{}
 	}
 }
 
-func (s *persistentChannelsWorker) DispatchWorker() {
-	if s.enabled {
-		go s.startWorker()
+func (w *persistentChannelsWorker) DispatchWorker() {
+	if w.enabled {
+		go w.startWorker()
 	}
 }
 
-func NewPersistentChannelsWorker(lc fx.Lifecycle, config *viper.Viper, logger *zap.Logger, persistentChannelService services.PersistentChannelService) PersistentChannelsWorker {
+func NewPersistentChannelsWorker(lc fx.Lifecycle, config *viper.Viper, logger *zap.Logger, redisClient redis.UniversalClient, persistentChannelService services.PersistentChannelService) PersistentChannelsWorker {
 	enabled := config.GetBool("workers.persistent_channels.enabled")
 	interval := config.GetDuration("workers.persistent_channels.interval")
+	lockKey := config.GetString("workers.persistent_channels.lock_key")
+	lockTimeout := config.GetDuration("workers.persistent_channels.lock_timeout")
 
 	s := persistentChannelsWorker{
 		enabled: enabled,
 		logger: logger.Named("persistentChannelsWorker"),
 		interval: interval,
+		lockKey: lockKey,
+		lockTimeout: lockTimeout,
 		persistentChannelService: persistentChannelService,
+		quitChan: make(chan struct{}),
+		redisClient: redisClient,
 	}
 
 	lc.Append(fx.Hook{
@@ -73,5 +101,6 @@ func NewPersistentChannelsWorker(lc fx.Lifecycle, config *viper.Viper, logger *z
 			return nil
 		},
 	})
+
 	return &s
 }

@@ -4,6 +4,7 @@ go 1.12
 
 require (
 	github.com/RichardKnop/machinery v1.6.5
+	github.com/bsm/redis-lock v8.0.0+incompatible
 	github.com/gin-gonic/gin v1.4.0
 	github.com/go-bongo/bongo v0.10.4
 	github.com/go-redis/redis v6.15.2+incompatible

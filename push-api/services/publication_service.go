@@ -58,7 +58,7 @@ func (s *publicationService) PublishMessage(message *models.Message) PublishingR
 		return PublishingFailure
 	}
 
-	s.logger.Debug("message published", zap.Any("message", message))
+	s.logger.Debug("message published", zap.String("message", messageJson))
 	return PublishingSuccess
 }
 

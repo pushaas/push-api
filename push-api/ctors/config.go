@@ -38,6 +38,8 @@ func setupFromDefaults(config *viper.Viper, env string) {
 	// workers
 	config.SetDefault("workers.persistent_channels.enabled", true)
 	config.SetDefault("workers.persistent_channels.interval", "1m")
+	config.SetDefault("workers.persistent_channels.lock_key", "lock_persistent_channels")
+	config.SetDefault("workers.persistent_channels.lock_timeout", "50s")
 }
 
 func setupFromConfigurationFile(config *viper.Viper, env string) error {
