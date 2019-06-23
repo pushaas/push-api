@@ -6,16 +6,24 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
 	"go.uber.org/fx"
+	"go.uber.org/zap"
 
 	"github.com/rafaeleyng/push-api/push-api/ctors"
 	"github.com/rafaeleyng/push-api/push-api/workers"
 )
 
-func runApp(router *gin.Engine, config *viper.Viper, persistentChannelsWorker workers.PersistentChannelsWorker) error {
+func runApp(logger *zap.Logger, router *gin.Engine, config *viper.Viper, persistentChannelsWorker workers.PersistentChannelsWorker) error {
+	log := logger.Named("runApp")
+
 	persistentChannelsWorker.DispatchWorker()
 
 	err := router.Run(fmt.Sprintf(":%s", config.GetString("server.port")))
-	return err
+	if err != nil {
+		log.Error("error on running server", zap.Error(err))
+		return err
+	}
+
+	return nil
 }
 
 func Run() {
