@@ -29,14 +29,15 @@ func setupFromDefaults(config *viper.Viper, env string) {
 	// api
 	config.SetDefault("api.enable_auth", true)
 
-	// app
-	config.SetDefault("app.persistent_channels.revive_enabled", true)
-
 	// redis
-	config.Set("redis.pubsub.publish_task", "publish")
+	config.SetDefault("redis.pubsub.publish_task", "publish")
 
 	// server
 	config.SetDefault("server.port", "8080")
+
+	// workers
+	config.SetDefault("workers.persistent_channels.enabled", true)
+	config.SetDefault("workers.persistent_channels.interval", "1m")
 }
 
 func setupFromConfigurationFile(config *viper.Viper, env string) error {

@@ -1,9 +1,6 @@
 package services
 
 import (
-	"time"
-
-	"github.com/spf13/viper"
 	"go.uber.org/zap"
 
 	"github.com/rafaeleyng/push-api/push-api/models"
@@ -11,18 +8,17 @@ import (
 
 type (
 	PersistentChannelService interface {
-		DispatchWorker()
+		TriggerRevivePersistentChannels()
 	}
 
 	persistentChannelService struct {
-		enabled bool
 		logger *zap.Logger
 		publicationService PublicationService
 		channelService ChannelService
 	}
 )
 
-func (s *persistentChannelService) revivePersistentChannels() {
+func (s *persistentChannelService) TriggerRevivePersistentChannels() {
 	channels, channelResult := s.channelService.GetAll()
 	if channelResult != ChannelRetrievalSuccess {
 		s.logger.Error("failed to retrieve persistent channels to revive")
@@ -48,36 +44,8 @@ func (s *persistentChannelService) revivePersistentChannels() {
 	s.logger.Debug("did revive persistent channels")
 }
 
-func (s *persistentChannelService) runWorker() {
-	// run once right away
-	go s.revivePersistentChannels()
-
-	// thanks https://stackoverflow.com/a/16466581/1717979
-	ticker := time.NewTicker(time.Minute)
-	// TODO close quit channel on app shutdown
-	quit := make(chan struct{})
-	for {
-		select {
-		case <- ticker.C:
-			go s.revivePersistentChannels()
-		case <- quit:
-			ticker.Stop()
-			return
-		}
-	}
-}
-
-func (s *persistentChannelService) DispatchWorker() {
-	if s.enabled {
-		go s.runWorker()
-	}
-}
-
-func NewPersistentChannelService(config *viper.Viper, logger *zap.Logger, publicationService PublicationService, channelService ChannelService) PersistentChannelService {
-	enabled := config.GetBool("app.persistent_channels.revive_enabled")
-
+func NewPersistentChannelService(logger *zap.Logger, publicationService PublicationService, channelService ChannelService) PersistentChannelService {
 	return &persistentChannelService{
-		enabled: enabled,
 		logger: logger.Named("persistentChannelService"),
 		publicationService: publicationService,
 		channelService: channelService,
