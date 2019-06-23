@@ -63,9 +63,11 @@ func (s *publicationService) PublishMessage(message *models.Message) PublishingR
 }
 
 func NewPublicationService(config *viper.Viper, logger *zap.Logger, machineryServer *machinery.Server) PublicationService {
+	taskName := config.GetString("redis.pubsub.tasks.publish")
+
 	return &publicationService{
 		logger: logger.Named("publicationService"),
 		machineryServer: machineryServer,
-		taskName: config.GetString("redis.pubsub.publish_task"),
+		taskName: taskName,
 	}
 }

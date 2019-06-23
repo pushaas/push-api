@@ -30,7 +30,9 @@ func setupFromDefaults(config *viper.Viper, env string) {
 	config.SetDefault("api.enable_auth", true)
 
 	// redis
-	config.SetDefault("redis.pubsub.publish_task", "publish")
+	config.SetDefault("redis.db.channel.prefix", "ch")
+	config.SetDefault("redis.db.stats.prefix", "stats")
+	config.SetDefault("redis.pubsub.tasks.publish", "publish")
 
 	// server
 	config.SetDefault("server.port", "8080")

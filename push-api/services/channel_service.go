@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/go-redis/redis"
+	"github.com/spf13/viper"
 	"go.uber.org/zap"
 
 	"github.com/rafaeleyng/push-api/push-api/models"
@@ -24,6 +25,7 @@ type (
 	}
 
 	channelService struct{
+		channelKeyPrefix string
 		logger *zap.Logger
 		redisClient redis.UniversalClient
 	}
@@ -47,10 +49,8 @@ const (
 	ChannelDeletionFailure
 )
 
-const channelPrefix = "ch"
-
-func channelKey(id string) string {
-	return fmt.Sprintf("%s_%s", channelPrefix, id)
+func (s *channelService) channelKey(suffix string) string {
+	return fmt.Sprintf("%s_%s", s.channelKeyPrefix, suffix)
 }
 
 func (s *channelService) Create(channel *models.Channel) ChannelCreationResult {
@@ -63,7 +63,7 @@ func (s *channelService) Create(channel *models.Channel) ChannelCreationResult {
 	now := time.Now()
 	channel.Created = now.UTC()
 
-	key := channelKey(channel.Id)
+	key := s.channelKey(channel.Id)
 	value, err := json.Marshal(channel)
 	if err != nil {
 		s.logger.Error("error while marshaling channel", zap.String("key", key), zap.String("channel", channel.Id), zap.Error(err))
@@ -82,7 +82,7 @@ func (s *channelService) Create(channel *models.Channel) ChannelCreationResult {
 }
 
 func (s *channelService) Get(id string) (*models.Channel, ChannelRetrievalResult) {
-	key := channelKey(id)
+	key := s.channelKey(id)
 
 	value, err := s.redisClient.Get(key).Result()
 	if err == redis.Nil {
@@ -102,7 +102,7 @@ func (s *channelService) Get(id string) (*models.Channel, ChannelRetrievalResult
 }
 
 func (s *channelService) GetAll() ([]*models.Channel, ChannelRetrievalResult) {
-	key := channelKey("*")
+	key := s.channelKey("*")
 
 	var keys []string
 	iterator := s.redisClient.Scan(0, key, 10).Iterator()
@@ -142,7 +142,7 @@ func (s *channelService) GetAll() ([]*models.Channel, ChannelRetrievalResult) {
 }
 
 func (s *channelService) Delete(id string) ChannelDeletionResult {
-	key := channelKey(id)
+	key := s.channelKey(id)
 	result, err := s.redisClient.Del(key).Result()
 
 	if err == redis.Nil {
@@ -159,8 +159,11 @@ func (s *channelService) Delete(id string) ChannelDeletionResult {
 	return ChannelDeletionSuccess
 }
 
-func NewChannelService(logger *zap.Logger, redisClient redis.UniversalClient) ChannelService {
+func NewChannelService(config *viper.Viper, logger *zap.Logger, redisClient redis.UniversalClient) ChannelService {
+	channelKeyPrefix := config.GetString("redis.db.channel.prefix")
+
 	return &channelService{
+		channelKeyPrefix: channelKeyPrefix,
 		logger: logger.Named("channelService"),
 		redisClient: redisClient,
 	}
