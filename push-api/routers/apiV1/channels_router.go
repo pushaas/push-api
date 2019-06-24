@@ -119,17 +119,11 @@ func (r *channelsRouter) getChannels(c *gin.Context) {
 	c.JSON(http.StatusOK, channels)
 }
 
-func (r *channelsRouter) getChannelStats(c *gin.Context) {
-	// TODO implement
-}
-
 func (r *channelsRouter) SetupRoutes(router gin.IRouter) {
 	router.POST("", r.postChannel)
 	router.GET("/:id", r.getChannel)
 	router.DELETE("/:id", r.deleteChannel)
 	router.GET("", r.getChannels)
-
-	router.GET("/:id/stats", r.getChannelStats)
 }
 
 func NewChannelsRouter(channelService services.ChannelService) routers.Router {

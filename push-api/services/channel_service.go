@@ -60,8 +60,7 @@ func (s *channelService) Create(channel *models.Channel) ChannelCreationResult {
 		return ChannelCreationAlreadyExist
 	}
 
-	now := time.Now()
-	channel.Created = now.UTC()
+	channel.Created = time.Now().UTC()
 
 	key := s.channelKey(channel.Id)
 	value, err := json.Marshal(channel)

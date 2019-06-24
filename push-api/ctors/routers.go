@@ -43,11 +43,20 @@ func getAuthMiddleware(config *viper.Viper, logger *zap.Logger) gin.HandlerFunc 
 func NewRouter(
 	config *viper.Viper,
 	logger *zap.Logger,
+
+	// root
 	rootRouter routers.RootRouter,
+
+	// static
 	staticRouter routers.StaticRouter,
+
+	// api
 	apiRootRouter routers.ApiRootRouter,
+
+	// api v1
 	v1ChannelsRouter apiV1.ChannelsRouter,
 	v1MessagesRouter apiV1.MessagesRouter,
+	v1StatsRouter apiV1.StatsRouter,
 ) *gin.Engine {
 	envConfig := config.Get("env")
 	if envConfig == "prod" {
@@ -79,6 +88,10 @@ func NewRouter(
 			g(r, "/messages", func(r gin.IRouter) {
 				v1MessagesRouter.SetupRoutes(r)
 			})
+
+			g(r, "/stats", func(r gin.IRouter) {
+				v1StatsRouter.SetupRoutes(r)
+			})
 		})
 	})
 
@@ -103,4 +116,8 @@ func NewChannelsRouter(channelService services.ChannelService) apiV1.ChannelsRou
 
 func NewMessagesRouter(publicationService services.PublicationService) apiV1.MessagesRouter {
 	return apiV1.NewMessagesRouter(publicationService)
+}
+
+func NewStatsRouter(statsService services.StatsService) apiV1.StatsRouter {
+	return apiV1.NewStatsRouter(statsService)
 }

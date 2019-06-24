@@ -27,6 +27,7 @@ type (
 		persistentChannelService services.PersistentChannelService
 		quitChan chan struct{}
 		redisClient redis.UniversalClient
+		workersEnabled bool
 	}
 )
 
@@ -73,7 +74,7 @@ func (w *persistentChannelsWorker) stopWorker() {
 }
 
 func (w *persistentChannelsWorker) DispatchWorker() {
-	if w.enabled {
+	if w.workersEnabled && w.enabled {
 		go w.startWorker()
 	}
 }
@@ -83,6 +84,7 @@ func NewPersistentChannelsWorker(lc fx.Lifecycle, config *viper.Viper, logger *z
 	interval := config.GetDuration("workers.persistent_channels.interval")
 	lockKey := config.GetString("workers.persistent_channels.lock_key")
 	lockTimeout := config.GetDuration("workers.persistent_channels.lock_timeout")
+	workersEnabled := config.GetBool("workers.enabled")
 
 	s := persistentChannelsWorker{
 		enabled: enabled,
@@ -93,6 +95,7 @@ func NewPersistentChannelsWorker(lc fx.Lifecycle, config *viper.Viper, logger *z
 		persistentChannelService: persistentChannelService,
 		quitChan: make(chan struct{}),
 		redisClient: redisClient,
+		workersEnabled: workersEnabled,
 	}
 
 	lc.Append(fx.Hook{

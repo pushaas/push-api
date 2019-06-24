@@ -31,13 +31,15 @@ func setupFromDefaults(config *viper.Viper, env string) {
 
 	// redis
 	config.SetDefault("redis.db.channel.prefix", "ch")
-	config.SetDefault("redis.db.stats.prefix", "stats")
+	config.SetDefault("redis.db.stats_global.prefix", "stats_global")
+	config.SetDefault("redis.db.stats_channel.prefix", "stats_channel")
 	config.SetDefault("redis.pubsub.tasks.publish", "publish")
 
 	// server
 	config.SetDefault("server.port", "8080")
 
 	// workers
+	config.SetDefault("workers.enabled", true)
 	config.SetDefault("workers.persistent_channels.enabled", true)
 	config.SetDefault("workers.persistent_channels.interval", "1m")
 	config.SetDefault("workers.persistent_channels.lock_key", "lock_persistent_channels")

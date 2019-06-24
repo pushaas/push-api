@@ -41,11 +41,13 @@ func Run() {
 			ctors.NewApiRootRouter,
 			ctors.NewChannelsRouter,
 			ctors.NewMessagesRouter,
+			ctors.NewStatsRouter,
 
 			// services
 			ctors.NewChannelService,
 			ctors.NewPersistentChannelService,
 			ctors.NewPublicationService,
+			ctors.NewStatsService,
 
 			// workers
 			ctors.NewPersistentChannelsWorker,

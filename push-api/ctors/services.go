@@ -20,3 +20,7 @@ func NewChannelService(config *viper.Viper, logger *zap.Logger, redisClient redi
 func NewPersistentChannelService(logger *zap.Logger, publicationService services.PublicationService, channelService services.ChannelService) services.PersistentChannelService {
 	return services.NewPersistentChannelService(logger, publicationService, channelService)
 }
+
+func NewStatsService(config *viper.Viper, logger *zap.Logger, redisClient redis.UniversalClient) services.StatsService {
+	return services.NewStatsService(config, logger, redisClient)
+}
