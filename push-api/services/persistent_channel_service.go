@@ -23,9 +23,11 @@ func (s *persistentChannelService) TriggerRevivePersistentChannels() {
 	if channelResult != ChannelRetrievalSuccess {
 		s.logger.Error("failed to retrieve persistent channels to revive")
 		return
+	} else if len(channels) == 0 {
+		s.logger.Debug("no channels to revive")
+		return
 	}
 
-	s.logger.Debug("reviving persistent channels")
 	channelsIds := make([]string, len(channels))
 
 	for i, channel := range channels {
@@ -39,6 +41,7 @@ func (s *persistentChannelService) TriggerRevivePersistentChannels() {
 
 	if messageResult == PublishingFailure {
 		s.logger.Error("failed to revive persistent channels")
+		return
 	}
 
 	s.logger.Debug("did revive persistent channels")
