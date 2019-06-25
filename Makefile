@@ -18,7 +18,10 @@ run:
 	@PUSHAPI_ENV=local go run main.go
 
 watch:
-	@PUSHAPI_ENV=local realize start --run --no-config
+	@PUSHAPI_ENV=local realize start
+
+build-client:
+	@cd client && yarn build
 
 ########################################
 # docker

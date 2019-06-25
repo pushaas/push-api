@@ -1,9 +1,8 @@
 package routers
 
 import (
-	"net/http"
-
 	"github.com/gin-gonic/gin"
+	"github.com/spf13/viper"
 )
 
 type (
@@ -11,21 +10,19 @@ type (
 		Router
 	}
 
-	staticRouter struct{}
+	staticRouter struct{
+		staticsPath string
+	}
 )
 
-func (r *staticRouter) getStaticRoot(c *gin.Context) {
-	c.JSON(http.StatusOK, Response{
-		Data: gin.H{
-			"TODO": "TODO",
-		},
-	})
-}
-
 func (r *staticRouter) SetupRoutes(router gin.IRouter) {
-	router.GET("/", r.getStaticRoot)
+	router.Static("", r.staticsPath)
 }
 
-func NewStaticRouter() Router {
-	return &staticRouter{}
+func NewStaticRouter(config *viper.Viper) Router {
+	staticsPath := config.GetString("api.statics_path")
+
+	return &staticRouter{
+		staticsPath: staticsPath,
+	}
 }

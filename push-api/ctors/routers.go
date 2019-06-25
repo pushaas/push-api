@@ -40,12 +40,9 @@ func getAuthMiddleware(config *viper.Viper, logger *zap.Logger) gin.HandlerFunc 
 	return getNoAuthMiddleware(config, logger)
 }
 
-func NewRouter(
+func NewGinRouter(
 	config *viper.Viper,
 	logger *zap.Logger,
-
-	// root
-	rootRouter routers.RootRouter,
 
 	// static
 	staticRouter routers.StaticRouter,
@@ -64,14 +61,6 @@ func NewRouter(
 	}
 
 	r := gin.Default()
-
-	g(r, "/", func(r gin.IRouter) {
-		rootRouter.SetupRoutes(r)
-	})
-
-	g(r, "/static", func(r gin.IRouter) {
-		staticRouter.SetupRoutes(r)
-	})
 
 	g(r, "/api", func(r gin.IRouter) {
 		r.Use(getAuthMiddleware(config, logger))
@@ -95,15 +84,15 @@ func NewRouter(
 		})
 	})
 
+	g(r, "/admin", func(r gin.IRouter) {
+		staticRouter.SetupRoutes(r)
+	})
+
 	return r
 }
 
-func NewRootRouter() routers.RootRouter {
-	return routers.NewRootRouter()
-}
-
-func NewStaticRouter() routers.StaticRouter {
-	return routers.NewStaticRouter()
+func NewStaticRouter(config *viper.Viper) routers.StaticRouter {
+	return routers.NewStaticRouter(config)
 }
 
 func NewApiRootRouter() routers.ApiRootRouter {
