@@ -33,7 +33,7 @@ func setupFromDefaults(config *viper.Viper, env string) {
 	config.SetDefault("redis.db.channel.prefix", "ch")
 	config.SetDefault("redis.db.stats_global.prefix", "stats_global")
 	config.SetDefault("redis.db.stats_channel.prefix", "stats_channel")
-	config.SetDefault("redis.pubsub.tasks.publish", "publish")
+	config.SetDefault("redis.pubsub-channels.publish", "publish")
 
 	// server
 	config.SetDefault("server.port", "8080")
