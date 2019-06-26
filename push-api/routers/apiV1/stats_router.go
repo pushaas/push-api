@@ -55,7 +55,7 @@ func (r *statsRouter) SetupRoutes(router gin.IRouter) {
 	router.GET("/channels/:id", r.getChannelStats)
 }
 
-func NewStatsRouter(statsService services.StatsService) routers.Router {
+func NewStatsRouter(statsService services.StatsService) StatsRouter {
 	return &statsRouter{
 		statsService: statsService,
 	}

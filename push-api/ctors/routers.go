@@ -60,9 +60,9 @@ func NewGinRouter(
 		gin.SetMode(gin.ReleaseMode)
 	}
 
-	r := gin.Default()
+	baseRouter := gin.Default()
 
-	g(r, "/api", func(r gin.IRouter) {
+	g(baseRouter, "/api", func(r gin.IRouter) {
 		r.Use(getAuthMiddleware(config, logger))
 
 		g(r, "/", func(r gin.IRouter) {
@@ -84,11 +84,12 @@ func NewGinRouter(
 		})
 	})
 
-	g(r, "/admin", func(r gin.IRouter) {
+	g(baseRouter, "/admin", func(r gin.IRouter) {
 		staticRouter.SetupRoutes(r)
+		staticRouter.SetupClientSideRoutesSupport(baseRouter)
 	})
 
-	return r
+	return baseRouter
 }
 
 func NewStaticRouter(config *viper.Viper) routers.StaticRouter {
