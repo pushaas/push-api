@@ -1,51 +1,33 @@
 import React, { Component } from 'react'
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
+import { BrowserRouter as Router } from 'react-router-dom'
+import CssBaseline from '@material-ui/core/CssBaseline'
 
 import channelsService from 'services/channelsService'
+import statsService from 'services/statsService'
 
-function Index() {
-  return <h2>Home</h2>;
-}
-
-function About() {
-  return <h2>About</h2>;
-}
-
-function Users() {
-  return <h2>Users</h2>;
-}
+import Private from './Private'
 
 class App extends Component {
   componentDidMount() {
     channelsService.getChannels()
       .then((data) => {
-        console.log('### data', data)
+        console.log('### getChannels data', data)
+      })
+
+    statsService.getGlobalStats()
+      .then((data) => {
+        console.log('### getGlobalStats data', data)
       })
   }
 
   render() {
     return (
-      <Router basename="/admin">
-        <div>
-          <nav>
-            <ul>
-              <li>
-                <Link to="/">Home</Link>
-              </li>
-              <li>
-                <Link to="/about/">About</Link>
-              </li>
-              <li>
-                <Link to="/users/">Users</Link>
-              </li>
-            </ul>
-          </nav>
-
-          <Route path="/" exact component={Index} />
-          <Route path="/about/" component={About} />
-          <Route path="/users/" component={Users} />
-        </div>
-      </Router>
+      <React.Fragment>
+        <CssBaseline />
+        <Router basename="/admin">
+          <Private />
+        </Router>
+      </React.Fragment>
     )
   }
 }
