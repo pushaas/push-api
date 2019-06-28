@@ -21,7 +21,7 @@ const Header = ({ classes, open, handleDrawerOpen }) => (
         <MenuIcon />
       </IconButton>
       <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-        Dashboard
+        Stats
       </Typography>
       <IconButton color="inherit">
         <Badge badgeContent={4} color="secondary">
