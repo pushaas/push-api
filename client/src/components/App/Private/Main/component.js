@@ -1,19 +1,24 @@
 import React from 'react'
+import { Route } from 'react-router-dom'
+
 import Container from '@material-ui/core/Container'
 
-import { Route } from 'react-router-dom'
+import { makeUseStylesHook } from 'components/App/styles'
 
 import Stats from './views/Stats'
 import Channels from './views/Channels'
 
-const Main = ({ classes, fixedHeightPaper }) => (
-  <main className={classes.content}>
-    <div className={classes.appBarSpacer} />
-    <Container maxWidth="lg" className={classes.container}>
-      <Route path="/" exact component={Stats} />
-      <Route path="/channels/" render={() => <Channels classes={classes} fixedHeightPaper={fixedHeightPaper} />} />
-    </Container>
-  </main>
-)
+const Main = () => {
+  const classes = makeUseStylesHook()()
+  return (
+    <main className={classes.content}>
+      <div className={classes.appBarSpacer} />
+      <Container maxWidth="lg" className={classes.container}>
+        <Route path="/" exact component={Stats} />
+        <Route path="/channels/" render={() => <Channels />} />
+      </Container>
+    </main>
+  )
+}
 
 export default Main
