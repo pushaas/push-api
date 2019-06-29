@@ -77,15 +77,17 @@ export const makeUseStylesHook = () => {
       overflow: 'auto',
       flexDirection: 'column',
     },
-    fixedHeight: {
-      height: 240,
+    minHeightPaper: {
+      height: 480,
     },
-    fixedHeightPaper: {
-      height: 240,
-      padding: theme.spacing(2),
-      display: 'flex',
-      overflow: 'auto',
-      flexDirection: 'column',
+    channelIdCell: {
+      maxWidth: 100,
+      whiteWpace: 'nowrap',
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
+    },
+    channelInfoDivider: {
+      margin: '10px 0',
     },
   }))
 }
