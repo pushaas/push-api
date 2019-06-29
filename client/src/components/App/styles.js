@@ -78,7 +78,7 @@ export const makeUseStylesHook = () => {
       flexDirection: 'column',
     },
     minHeightPaper: {
-      height: 480,
+      minHeight: 480,
     },
     channelIdCell: {
       maxWidth: 100,
@@ -87,7 +87,7 @@ export const makeUseStylesHook = () => {
       textOverflow: 'ellipsis',
     },
     channelInfoDivider: {
-      margin: '10px 0',
+      margin: '20px 0',
     },
   }))
 }

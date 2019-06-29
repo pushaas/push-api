@@ -51,9 +51,7 @@ const Channels = () => {
       </Grid>
       <Grid item xs={6}>
         <Paper className={minHeightPaper}>
-          <SelectedChannel
-            selectedChannel={selectedChannel}
-          />
+          <SelectedChannel channel={selectedChannel} />
         </Paper>
       </Grid>
     </Grid>
