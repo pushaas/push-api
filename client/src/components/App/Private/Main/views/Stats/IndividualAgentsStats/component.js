@@ -1,7 +1,6 @@
 import React from 'react'
 import clsx from 'clsx'
 
-import Divider from '@material-ui/core/Divider'
 import Grid from '@material-ui/core/Grid'
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';

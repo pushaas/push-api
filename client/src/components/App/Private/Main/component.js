@@ -1,21 +1,26 @@
 import React from 'react'
-import { Route } from 'react-router-dom'
+import { Redirect, Route, Switch } from 'react-router-dom'
 
 import Container from '@material-ui/core/Container'
 
-import { makeUseStylesHook } from 'components/App/styles'
+import { privateStatsPath, privateChannelsPath } from 'navigation'
+import { useStyles } from 'components/App/styles'
 
 import Stats from './views/Stats'
 import Channels from './views/Channels'
 
-const Main = () => {
-  const classes = makeUseStylesHook()()
+const Main = (props) => {
+  console.log('### Main props', props)
+  const classes = useStyles()
   return (
     <main className={classes.content}>
       <div className={classes.appBarSpacer} />
       <Container maxWidth="lg" className={classes.container}>
-        <Route path="/" exact component={Stats} />
-        <Route path="/channels/" render={() => <Channels />} />
+        <Switch>
+          <Route path={privateStatsPath} exact component={Stats} />
+          <Route path={privateChannelsPath} component={Channels} />
+          <Redirect to={privateStatsPath} />
+        </Switch>
       </Container>
     </main>
   )

@@ -8,10 +8,10 @@ import IconButton from '@material-ui/core/IconButton'
 import MenuIcon from '@material-ui/icons/Menu'
 // import NotificationsIcon from '@material-ui/icons/Notifications'
 
-import { makeUseStylesHook } from 'components/App/styles'
+import { useStyles } from 'components/App/styles'
 
 const Header = ({ open, handleDrawerOpen }) => {
-  const classes = makeUseStylesHook()()
+  const classes = useStyles()
   return (
     <AppBar position="absolute" className={clsx(classes.appBar, open && classes.appBarShift)}>
       <Toolbar className={classes.toolbar}>

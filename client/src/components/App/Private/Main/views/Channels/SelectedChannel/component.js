@@ -5,7 +5,7 @@ import Typography from '@material-ui/core/Typography'
 import dateService from 'services/dateService'
 import statsService from 'services/statsService'
 
-import { makeUseStylesHook } from 'components/App/styles'
+import { useStyles } from 'components/App/styles'
 import Title from 'components/common/Title'
 
 const renderSubtitle1 = (text) => (<Typography component="p" variant="subtitle1" color="primary" gutterBottom>{text}</Typography>)
@@ -74,7 +74,7 @@ const SelectedChannelDetails = ({ channel, classes }) => (
 )
 
 const SelectedChannel = ({ channel }) => {
-  const classes = makeUseStylesHook()()
+  const classes = useStyles()
 
   return (
     <React.Fragment>

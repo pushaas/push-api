@@ -12,15 +12,15 @@ import Title from 'components/common/Title'
 
 import dateService from 'services/dateService'
 
-import { makeUseStylesHook } from 'components/App/styles'
+import { useStyles } from 'components/App/styles'
 
 const ChannelList = ({ channels, onDeleteChannel, onSelectChannel }) => {
-  const classes = makeUseStylesHook()()
+  const classes = useStyles()
 
   return (
     <React.Fragment>
       <Title>
-        Channels <small>({channels.length})</small>
+        Persistent Channels <small>({channels.length})</small>
       </Title>
       <Table size="small">
         <TableHead>

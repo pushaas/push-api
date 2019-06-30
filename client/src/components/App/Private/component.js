@@ -1,12 +1,13 @@
 import React from 'react'
-import { makeUseStylesHook } from 'components/App/styles'
+import { useStyles } from 'components/App/styles'
 
 import Header from './Header'
 import Menu from './Menu'
 import Main from './Main'
 
-const Private = () => {
-  const classes = makeUseStylesHook()()
+const Private = (props) => {
+  console.log('### Private props', props)
+  const classes = useStyles()
   const [open, setOpen] = React.useState(true)
   const handleDrawerOpen = () => { setOpen(true) }
   const handleDrawerClose = () => { setOpen(false) }

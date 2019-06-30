@@ -6,13 +6,13 @@ import Paper from '@material-ui/core/Paper'
 
 import channelsService from 'services/channelsService'
 
-import { makeUseStylesHook } from 'components/App/styles'
+import { useStyles } from 'components/App/styles'
 
 import ChannelList from './ChannelList'
 import SelectedChannel from './SelectedChannel'
 
 const Channels = () => {
-  const classes = makeUseStylesHook()()
+  const classes = useStyles()
   const [selectedChannel, setSelectedChannel] = useState(null)
   const [channels, setChannels] = useState([])
 

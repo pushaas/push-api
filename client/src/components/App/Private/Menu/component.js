@@ -12,7 +12,8 @@ import ListItemText from '@material-ui/core/ListItemText'
 import DashboardIcon from '@material-ui/icons/Dashboard'
 import BarChartIcon from '@material-ui/icons/BarChart'
 
-import { makeUseStylesHook } from 'components/App/styles'
+import { useStyles } from 'components/App/styles'
+import { privateStatsPath, privateChannelsPath } from 'navigation'
 
 const ListItemLink = ({ icon, primary, to }) => {
   const renderLink = React.forwardRef((itemProps, ref) => (<Link to={to} {...itemProps} innerRef={ref} />))
@@ -28,13 +29,13 @@ const ListItemLink = ({ icon, primary, to }) => {
 
 const MenuItems = () => (
   <div>
-    <ListItemLink to="/" primary="Stats" icon={<BarChartIcon />} />
-    <ListItemLink to="/channels/" primary="Channels" icon={<DashboardIcon />} />
+    <ListItemLink to={privateStatsPath} primary="Stats" icon={<BarChartIcon />} />
+    <ListItemLink to={privateChannelsPath} primary="Persistent Channels" icon={<DashboardIcon />} />
   </div>
 )
 
 const Menu = ({ open, handleDrawerClose }) => {
-  const classes = makeUseStylesHook()()
+  const classes = useStyles()
   return (
     <Drawer
       variant="permanent"

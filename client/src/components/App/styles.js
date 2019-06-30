@@ -2,7 +2,7 @@ import { makeStyles } from '@material-ui/core/styles'
 
 const drawerWidth = 240
 
-export const makeUseStylesHook = () => {
+export const useStyles = () => {
   return makeStyles(theme => ({
     root: {
       display: 'flex',
@@ -95,5 +95,5 @@ export const makeUseStylesHook = () => {
     statsSubscribers: {
       flex: 1,
     },
-  }))
+  }))()
 }

@@ -8,7 +8,7 @@ import Typography from '@material-ui/core/Typography'
 import dateService from 'services/dateService'
 import statsService from 'services/statsService'
 
-import { makeUseStylesHook } from 'components/App/styles'
+import { useStyles } from 'components/App/styles'
 import Title from 'components/common/Title'
 import IndividualAgentsStats from './IndividualAgentsStats'
 
@@ -45,7 +45,7 @@ const SubscribersStats = ({ stats, classes }) => (
 )
 
 const Stats = () => {
-  const classes = makeUseStylesHook()()
+  const classes = useStyles()
   const [stats, setStats] = useState()
 
   useEffect(() => {
