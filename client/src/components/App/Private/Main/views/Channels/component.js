@@ -36,12 +36,12 @@ const Channels = () => {
       })
   }
 
-  const minHeightPaper = clsx(classes.paper, classes.minHeightPaper)
+  const channelsMinHeightPaper = clsx(classes.paper, classes.channelsMinHeightPaper)
 
   return (
     <Grid container spacing={3}>
       <Grid item xs={6}>
-        <Paper className={minHeightPaper}>
+        <Paper className={channelsMinHeightPaper}>
           <ChannelList
             channels={channels}
             onDeleteChannel={handleDeleteChannel}
@@ -50,7 +50,7 @@ const Channels = () => {
         </Paper>
       </Grid>
       <Grid item xs={6}>
-        <Paper className={minHeightPaper}>
+        <Paper className={channelsMinHeightPaper}>
           <SelectedChannel channel={selectedChannel} />
         </Paper>
       </Grid>

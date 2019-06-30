@@ -77,8 +77,11 @@ export const makeUseStylesHook = () => {
       overflow: 'auto',
       flexDirection: 'column',
     },
-    minHeightPaper: {
+    channelsMinHeightPaper: {
       minHeight: 480,
+    },
+    statsMinHeightPaper: {
+      minHeight: 200,
     },
     channelIdCell: {
       maxWidth: 100,
@@ -88,6 +91,9 @@ export const makeUseStylesHook = () => {
     },
     channelInfoDivider: {
       margin: '20px 0',
+    },
+    statsSubscribers: {
+      flex: 1,
     },
   }))
 }
