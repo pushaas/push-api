@@ -1,17 +1,20 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import clsx from 'clsx'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
 import IconButton from '@material-ui/core/IconButton'
-// import Badge from '@material-ui/core/Badge'
 import MenuIcon from '@material-ui/icons/Menu'
-// import NotificationsIcon from '@material-ui/icons/Notifications'
+import ExitToAppIcon from '@material-ui/icons/ExitToApp'
 
-import { useStyles } from 'components/App/styles'
+import { useStyles } from 'components/App/Private/styles'
+import SetUserContext from 'components/contexts/SetUserContext'
 
 const Header = ({ open, handleDrawerOpen }) => {
   const classes = useStyles()
+  const setUser = useContext(SetUserContext)
+  const logout = () => setUser(null)
+
   return (
     <AppBar position="absolute" className={clsx(classes.appBar, open && classes.appBarShift)}>
       <Toolbar className={classes.toolbar}>
@@ -27,11 +30,9 @@ const Header = ({ open, handleDrawerOpen }) => {
         <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
           Stats
         </Typography>
-        {/* <IconButton color="inherit">
-          <Badge badgeContent={4} color="secondary">
-            <NotificationsIcon />
-          </Badge>
-        </IconButton> */}
+        <IconButton color="inherit" onClick={logout}>
+          <ExitToAppIcon />
+        </IconButton>
       </Toolbar>
     </AppBar>
   )

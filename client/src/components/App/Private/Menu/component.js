@@ -12,7 +12,7 @@ import ListItemText from '@material-ui/core/ListItemText'
 import DashboardIcon from '@material-ui/icons/Dashboard'
 import BarChartIcon from '@material-ui/icons/BarChart'
 
-import { useStyles } from 'components/App/styles'
+import { useStyles } from 'components/App/Private/styles'
 import { privateStatsPath, privateChannelsPath } from 'navigation'
 
 const ListItemLink = ({ icon, primary, to }) => {

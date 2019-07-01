@@ -12,7 +12,7 @@ import Title from 'components/common/Title'
 
 import dateService from 'services/dateService'
 
-import { useStyles } from 'components/App/styles'
+import { useStyles } from 'components/App/Private/styles'
 
 const ChannelList = ({ channels, onDeleteChannel, onSelectChannel }) => {
   const classes = useStyles()

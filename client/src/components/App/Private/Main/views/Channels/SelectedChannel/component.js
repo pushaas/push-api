@@ -5,7 +5,7 @@ import Typography from '@material-ui/core/Typography'
 import dateService from 'services/dateService'
 import statsService from 'services/statsService'
 
-import { useStyles } from 'components/App/styles'
+import { useStyles } from 'components/App/Private/styles'
 import Title from 'components/common/Title'
 
 const renderSubtitle1 = (text) => (<Typography component="p" variant="subtitle1" color="primary" gutterBottom>{text}</Typography>)

@@ -4,7 +4,7 @@ import { Redirect, Route, Switch } from 'react-router-dom'
 import Container from '@material-ui/core/Container'
 
 import { privateStatsPath, privateChannelsPath } from 'navigation'
-import { useStyles } from 'components/App/styles'
+import { useStyles } from 'components/App/Private/styles'
 
 import Stats from './views/Stats'
 import Channels from './views/Channels'

@@ -6,7 +6,7 @@ import Paper from '@material-ui/core/Paper'
 
 import channelsService from 'services/channelsService'
 
-import { useStyles } from 'components/App/styles'
+import { useStyles } from 'components/App/Private/styles'
 
 import ChannelList from './ChannelList'
 import SelectedChannel from './SelectedChannel'

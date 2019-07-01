@@ -1,5 +1,5 @@
 import React from 'react'
-import { useStyles } from 'components/App/styles'
+import { useStyles } from 'components/App/Private/styles'
 
 import Header from './Header'
 import Menu from './Menu'
