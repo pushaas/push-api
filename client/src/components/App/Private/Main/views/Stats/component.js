@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import clsx from 'clsx'
 
 import Grid from '@material-ui/core/Grid'
@@ -8,8 +8,10 @@ import Typography from '@material-ui/core/Typography'
 import dateService from 'services/dateService'
 import statsService from 'services/statsService'
 
+import SetTitleContext from 'components/contexts/SetTitleContext'
 import { useStyles } from 'components/App/Private/styles'
 import Title from 'components/common/Title'
+
 import IndividualAgentsStats from './IndividualAgentsStats'
 
 const AggregatedAgentsStats = ({ stats, classes }) => (
@@ -47,13 +49,16 @@ const SubscribersStats = ({ stats, classes }) => (
 const Stats = () => {
   const classes = useStyles()
   const [stats, setStats] = useState()
+  const setTitle = useContext(SetTitleContext)
 
   useEffect(() => {
+    setTitle('Stats')
+
     statsService.getGlobalStats()
       .then((data) => {
         setStats(data)
       })
-  }, [])
+  }, [setTitle])
 
   const statsMinHeightPaper = clsx(classes.paper, classes.statsMinHeightPaper)
 

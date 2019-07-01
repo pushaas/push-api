@@ -10,7 +10,6 @@ import credentialsService from 'services/credentialsService'
 
 import { routerBaseName } from 'navigation'
 
-import { UserContext } from 'components/contexts/UserContext'
 import SetUserContext from 'components/contexts/SetUserContext'
 import Private from './Private'
 import Public from './Public'
@@ -44,11 +43,9 @@ const App = () => {
     <React.Fragment>
       <CssBaseline />
       <Router basename={routerBaseName}>
-        <UserContext.Provider value={user}>
-          <SetUserContext.Provider value={setUser}>
-            {status === STATUS_LOADING ? renderLoading() : renderLoaded()}
-          </SetUserContext.Provider>
-        </UserContext.Provider>
+        <SetUserContext.Provider value={setUser}>
+          {status === STATUS_LOADING ? renderLoading() : renderLoaded()}
+        </SetUserContext.Provider>
       </Router>
     </React.Fragment>
   )

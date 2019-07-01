@@ -11,10 +11,13 @@ import credentialsService from 'services/credentialsService'
 
 import { useStyles } from 'components/App/Private/styles'
 import SetUserContext from 'components/contexts/SetUserContext'
+import TitleContext from 'components/contexts/TitleContext'
 
 const Header = ({ open, handleDrawerOpen }) => {
   const classes = useStyles()
   const setUser = useContext(SetUserContext)
+  const title = useContext(TitleContext)
+
   const logout = () => {
     credentialsService.clearCredentials()
     setUser(null)
@@ -33,7 +36,7 @@ const Header = ({ open, handleDrawerOpen }) => {
           <MenuIcon />
         </IconButton>
         <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-          Stats
+          {title}
         </Typography>
         <IconButton color="inherit" onClick={logout}>
           <ExitToAppIcon />

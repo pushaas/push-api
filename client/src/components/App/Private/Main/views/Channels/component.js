@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import clsx from 'clsx'
 
 import Grid from '@material-ui/core/Grid'
@@ -6,6 +6,7 @@ import Paper from '@material-ui/core/Paper'
 
 import channelsService from 'services/channelsService'
 
+import SetTitleContext from 'components/contexts/SetTitleContext'
 import { useStyles } from 'components/App/Private/styles'
 
 import ChannelList from './ChannelList'
@@ -15,8 +16,11 @@ const Channels = () => {
   const classes = useStyles()
   const [selectedChannel, setSelectedChannel] = useState(null)
   const [channels, setChannels] = useState([])
+  const setTitle = useContext(SetTitleContext)
 
   useEffect(() => {
+    setTitle('Persistent Channels')
+
     channelsService.getChannels()
       .then((data) => {
         setChannels(data)
@@ -24,7 +28,7 @@ const Channels = () => {
           setSelectedChannel(data[0])
         }
       })
-  }, [])
+  }, [setTitle])
 
   const handleDeleteChannel = (channel) => {
     channelsService.deleteChannel(channel.id)
