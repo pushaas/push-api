@@ -1,7 +1,9 @@
 package routers
 
 import (
+	"net/http"
 	"path/filepath"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
@@ -21,7 +23,12 @@ type (
 
 func (r *staticRouter) SetupClientSideRoutesSupport(engine *gin.Engine) {
 	engine.NoRoute(func(c *gin.Context) {
-		c.File(r.indexPath)
+		if strings.HasPrefix(c.Request.URL.String(), "/admin/") {
+			c.File(r.indexPath)
+			return
+		}
+
+		c.Status(http.StatusNotFound)
 	})
 }
 

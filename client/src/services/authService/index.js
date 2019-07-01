@@ -9,7 +9,6 @@ const checkAuth = ({ username, password } = {}) => {
   }
 
   return baseClient.get('/auth', config)
-    .then(({ data }) => data)
 }
 
 export default {

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { BrowserRouter as Router } from 'react-router-dom'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import CircularProgress from '@material-ui/core/CircularProgress'
+import { ToastContainer } from 'react-toastify'
 
 import { useStyles } from 'components/App/styles'
 
@@ -42,6 +43,8 @@ const App = () => {
   return (
     <React.Fragment>
       <CssBaseline />
+      <ToastContainer />
+
       <Router basename={routerBaseName}>
         <SetUserContext.Provider value={setUser}>
           {status === STATUS_LOADING ? renderLoading() : renderLoaded()}
