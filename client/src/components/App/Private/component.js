@@ -6,7 +6,6 @@ import Menu from './Menu'
 import Main from './Main'
 
 const Private = (props) => {
-  console.log('### Private props', props)
   const classes = useStyles()
   const [open, setOpen] = React.useState(true)
   const handleDrawerOpen = () => { setOpen(true) }

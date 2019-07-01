@@ -1,9 +1,13 @@
 import React, { useContext, useState } from 'react'
 import Button from '@material-ui/core/Button'
 import TextField from '@material-ui/core/TextField'
+import Divider from '@material-ui/core/Divider'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 import Container from '@material-ui/core/Container'
+
+import authService from 'services/authService'
+import credentialsService from 'services/credentialsService'
 
 import { useStyles } from 'components/App/Public/styles'
 import SetUserContext from 'components/contexts/SetUserContext'
@@ -23,9 +27,12 @@ const Login = () => {
 
   const login = (e) => {
     e.preventDefault()
-    // TODO
-    console.log('### login', username, password)
-    setUser({ name: 'Rafael' })
+
+    const credentials = { username, password }
+    credentialsService.setCredentials(credentials)
+
+    authService.checkAuth(credentials)
+      .then(() => setUser({ username }))
   }
 
   return (
@@ -70,6 +77,14 @@ const Login = () => {
             <Grid item xs>
               <Typography variant="body2" color="textSecondary" align="center">
                 Use the same credentials your app uses to call the PushApi
+              </Typography>
+            </Grid>
+          </Grid>
+          <Divider className={classes.infoDivider} />
+          <Grid container>
+            <Grid item xs>
+              <Typography variant="body2" color="textSecondary" align="center">
+                Please note: Currently this app uses basic auth. Credentials will be transmited in plain text to the API and stored on your browser's localStorage until you logout
               </Typography>
             </Grid>
           </Grid>

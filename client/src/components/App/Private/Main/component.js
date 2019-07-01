@@ -10,7 +10,6 @@ import Stats from './views/Stats'
 import Channels from './views/Channels'
 
 const Main = (props) => {
-  console.log('### Main props', props)
   const classes = useStyles()
   return (
     <main className={classes.content}>

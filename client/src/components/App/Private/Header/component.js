@@ -7,13 +7,18 @@ import IconButton from '@material-ui/core/IconButton'
 import MenuIcon from '@material-ui/icons/Menu'
 import ExitToAppIcon from '@material-ui/icons/ExitToApp'
 
+import credentialsService from 'services/credentialsService'
+
 import { useStyles } from 'components/App/Private/styles'
 import SetUserContext from 'components/contexts/SetUserContext'
 
 const Header = ({ open, handleDrawerOpen }) => {
   const classes = useStyles()
   const setUser = useContext(SetUserContext)
-  const logout = () => setUser(null)
+  const logout = () => {
+    credentialsService.clearCredentials()
+    setUser(null)
+  }
 
   return (
     <AppBar position="absolute" className={clsx(classes.appBar, open && classes.appBarShift)}>

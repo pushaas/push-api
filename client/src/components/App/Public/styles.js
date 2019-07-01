@@ -24,5 +24,8 @@ export const useStyles = () => {
     submit: {
       margin: theme.spacing(3, 0, 2),
     },
+    infoDivider: {
+      margin: '20px 0',
+    },
   }))()
 }
