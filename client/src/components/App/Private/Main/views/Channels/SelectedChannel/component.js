@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import Divider from '@material-ui/core/Divider'
 import Typography from '@material-ui/core/Typography'
 
 import dateService from 'services/dateService'
 import statsService from 'services/statsService'
 
+import ConfigContext from 'components/contexts/ConfigContext'
 import { useStyles } from 'components/App/Private/styles'
 import Title from 'components/common/Title'
 
@@ -28,6 +29,15 @@ const SelectedChannelInfo = ({ channel }) => (
     {renderTextItem('expiration', channel.ttl ? (dateService.calculateExpiration(channel.created, channel.ttl)) : 'never')}
   </React.Fragment>
 )
+
+// // TODO
+// const SelectedChannelMessages = ({ channel }) => {
+//   const config = useContext(ConfigContext)
+//   console.log('### config', config)
+//   return (
+//     null
+//   )
+// }
 
 const SelectedChannelStats = ({ channel }) => {
   const [stats, setStats] = useState(null)
@@ -67,7 +77,8 @@ const SelectedChannelDetails = ({ channel, classes }) => (
   <React.Fragment>
     <Divider className={classes.channelInfoDivider} />
     <SelectedChannelInfo channel={channel} />
-    {/* TODO add component with messages */}
+    {/* <Divider className={classes.channelInfoDivider} />
+    <SelectedChannelMessages channel={channel} /> */}
     <Divider className={classes.channelInfoDivider} />
     <SelectedChannelStats channel={channel} />
   </React.Fragment>

@@ -1,4 +1,6 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
+
 import Table from '@material-ui/core/Table'
 import TableBody from '@material-ui/core/TableBody'
 import TableCell from '@material-ui/core/TableCell'
@@ -8,13 +10,14 @@ import IconButton from '@material-ui/core/IconButton'
 import CheckIcon from '@material-ui/icons/Check'
 import DeleteIcon from '@material-ui/icons/Delete'
 
-import Title from 'components/common/Title'
+import { privateChannelsPath } from 'navigation'
 
 import dateService from 'services/dateService'
 
+import Title from 'components/common/Title'
 import { useStyles } from 'components/App/Private/styles'
 
-const ChannelList = ({ channels, onDeleteChannel, onSelectChannel }) => {
+const ChannelList = ({ channels, onDeleteChannel }) => {
   const classes = useStyles()
 
   return (
@@ -36,9 +39,11 @@ const ChannelList = ({ channels, onDeleteChannel, onSelectChannel }) => {
           {channels.map(channel => (
             <TableRow key={channel.id}>
               <TableCell>
-                <IconButton edge="end" size="small" onClick={() => onSelectChannel(channel)}>
-                  <CheckIcon />
-                </IconButton>
+                <Link to={`${privateChannelsPath}/${channel.id}`}>
+                  <IconButton edge="end" size="small">
+                    <CheckIcon />
+                  </IconButton>
+                </Link>
               </TableCell>
               <TableCell className={classes.channelIdCell}>{channel.id}</TableCell>
               <TableCell>{channel.ttl}</TableCell>

@@ -1,8 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react'
+import { Redirect } from 'react-router-dom'
 import clsx from 'clsx'
 
 import Grid from '@material-ui/core/Grid'
 import Paper from '@material-ui/core/Paper'
+
+import { privateChannelsPath } from 'navigation'
 
 import channelsService from 'services/channelsService'
 
@@ -12,35 +15,44 @@ import { useStyles } from 'components/App/Private/styles'
 import ChannelList from './ChannelList'
 import SelectedChannel from './SelectedChannel'
 
-const Channels = () => {
+const Channels = (props) => {
+  const id = props.match.params.id
   const classes = useStyles()
-  const [selectedChannel, setSelectedChannel] = useState(null)
+  const [didLoad, setDidLoad] = useState(false)
   const [channels, setChannels] = useState([])
   const setTitle = useContext(SetTitleContext)
 
+  const findSelectedChannelById = () => {
+    if (id && channels.length) {
+      return channels.find(c => c.id === id)
+    }
+  }
+  const selectedChannel = id ? findSelectedChannelById() : undefined
+
   useEffect(() => {
     setTitle('Persistent Channels')
+  }, [setTitle])
 
+  useEffect(() => {
     channelsService.getChannels()
       .then((data) => {
         setChannels(data)
-        if (data.length) {
-          setSelectedChannel(data[0])
-        }
+        setDidLoad(true)
       })
-  }, [setTitle])
+  }, [])
 
   const handleDeleteChannel = (channel) => {
     channelsService.deleteChannel(channel.id)
-      .then(() => {
-        if (channel === selectedChannel) {
-          setSelectedChannel(null)
-        }
-        setChannels(channels.filter(c => c !== channel))
-      })
+      .then(() => setChannels(channels.filter(c => c !== channel)))
   }
 
   const channelsMinHeightPaper = clsx(classes.paper, classes.channelsMinHeightPaper)
+
+  if (didLoad && id && !selectedChannel) {
+    return (
+      <Redirect to={privateChannelsPath} />
+    )
+  }
 
   return (
     <Grid container spacing={3}>
@@ -49,7 +61,6 @@ const Channels = () => {
           <ChannelList
             channels={channels}
             onDeleteChannel={handleDeleteChannel}
-            onSelectChannel={setSelectedChannel}
           />
         </Paper>
       </Grid>

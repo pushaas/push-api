@@ -3,7 +3,7 @@ import { Redirect, Route, Switch } from 'react-router-dom'
 
 import Container from '@material-ui/core/Container'
 
-import { privateStatsPath, privateChannelsPath } from 'navigation'
+import { privateStatsPath, privateChannelsPathWithOptionalParam } from 'navigation'
 import { useStyles } from 'components/App/Private/styles'
 
 import Stats from './views/Stats'
@@ -17,7 +17,7 @@ const Main = (props) => {
       <Container maxWidth="lg" className={classes.container}>
         <Switch>
           <Route path={privateStatsPath} exact component={Stats} />
-          <Route path={privateChannelsPath} component={Channels} />
+          <Route path={privateChannelsPathWithOptionalParam} component={Channels} />
           <Redirect to={privateStatsPath} />
         </Switch>
       </Container>

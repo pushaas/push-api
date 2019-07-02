@@ -53,7 +53,9 @@ const Stats = () => {
 
   useEffect(() => {
     setTitle('Stats')
+  }, [setTitle])
 
+  useEffect(() => {
     statsService.getGlobalStats()
       .then((data) => {
         setStats(data)
