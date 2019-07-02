@@ -30,6 +30,10 @@ func setupFromDefaults(config *viper.Viper, env string) {
 	config.SetDefault("api.enable_auth", true)
 	config.SetDefault("api.statics_path", "./client/build")
 
+	// push-stream
+	config.SetDefault("push_stream.host", "localhost")
+	config.SetDefault("push_stream.port", "9080")
+
 	// redis
 	config.SetDefault("redis.db.channel.prefix", "ch")
 	config.SetDefault("redis.db.stats_global.prefix", "stats_global")

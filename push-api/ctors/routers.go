@@ -53,6 +53,7 @@ func NewGinRouter(
 	// api v1
 	v1AuthRouter apiV1.AuthRouter,
 	v1ChannelsRouter apiV1.ChannelsRouter,
+	v1ConfigRouter apiV1.ConfigRouter,
 	v1MessagesRouter apiV1.MessagesRouter,
 	v1StatsRouter apiV1.StatsRouter,
 ) *gin.Engine {
@@ -77,6 +78,10 @@ func NewGinRouter(
 
 			g(r, "/channels", func(r gin.IRouter) {
 				v1ChannelsRouter.SetupRoutes(r)
+			})
+
+			g(r, "/config", func(r gin.IRouter) {
+				v1ConfigRouter.SetupRoutes(r)
 			})
 
 			g(r, "/messages", func(r gin.IRouter) {
@@ -107,6 +112,10 @@ func NewApiRootRouter() routers.ApiRootRouter {
 
 func NewAuthRouter() apiV1.AuthRouter {
 	return apiV1.NewAuthRouter()
+}
+
+func NewConfigRouter(config *viper.Viper) apiV1.ConfigRouter {
+	return apiV1.NewConfigRouter(config)
 }
 
 func NewChannelsRouter(channelService services.ChannelService) apiV1.ChannelsRouter {

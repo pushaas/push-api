@@ -1,6 +1,5 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import Divider from '@material-ui/core/Divider'
-import Typography from '@material-ui/core/Typography'
 
 import dateService from 'services/dateService'
 import statsService from 'services/statsService'
@@ -8,36 +7,24 @@ import statsService from 'services/statsService'
 import ConfigContext from 'components/contexts/ConfigContext'
 import { useStyles } from 'components/App/Private/styles'
 import Title from 'components/common/Title'
-
-const renderSubtitle1 = (text) => (<Typography component="p" variant="subtitle1" color="primary" gutterBottom>{text}</Typography>)
-const renderSubtitle2 = (text) => (<Typography component="p" variant="subtitle2" color="primary" gutterBottom>{text}</Typography>)
-const renderTextItem = (label, value) => (
-  <div>
-    <Typography component="span" display="inline" variant="overline" color="primary" >{label} </Typography>
-    <Typography component="span" display="inline" variant="body2">{value}</Typography>
-  </div>
-)
+import {
+  renderSubtitle1,
+  renderSubtitle2,
+  renderTextItem,
+} from 'components/common/textHelpers'
+import Messages from './Messages'
 
 const NoSelectedChannel = () => renderTextItem('No channel selected')
 
 const SelectedChannelInfo = ({ channel }) => (
   <React.Fragment>
-    {renderSubtitle1('Data')}
+    {renderSubtitle1('Channel Info')}
     {renderTextItem('id', channel.id)}
     {renderTextItem('ttl', channel.ttl)}
     {renderTextItem('created', dateService.formatDate(channel.created))}
     {renderTextItem('expiration', channel.ttl ? (dateService.calculateExpiration(channel.created, channel.ttl)) : 'never')}
   </React.Fragment>
 )
-
-// // TODO
-// const SelectedChannelMessages = ({ channel }) => {
-//   const config = useContext(ConfigContext)
-//   console.log('### config', config)
-//   return (
-//     null
-//   )
-// }
 
 const SelectedChannelStats = ({ channel }) => {
   const [stats, setStats] = useState(null)
@@ -55,7 +42,7 @@ const SelectedChannelStats = ({ channel }) => {
 
   return (
     <React.Fragment>
-      {renderSubtitle1('Stats')}
+      {renderSubtitle1('Channel Stats')}
       {renderSubtitle2('Aggregated')}
       {renderTextItem('subscribers', stats.aggregated.subscribers)}
       {renderSubtitle2('By agent')}
@@ -73,16 +60,23 @@ const SelectedChannelStats = ({ channel }) => {
   )
 }
 
-const SelectedChannelDetails = ({ channel, classes }) => (
-  <React.Fragment>
-    <Divider className={classes.channelInfoDivider} />
-    <SelectedChannelInfo channel={channel} />
-    {/* <Divider className={classes.channelInfoDivider} />
-    <SelectedChannelMessages channel={channel} /> */}
-    <Divider className={classes.channelInfoDivider} />
-    <SelectedChannelStats channel={channel} />
-  </React.Fragment>
-)
+const SelectedChannelDetails = ({ channel, classes }) => {
+  const config = useContext(ConfigContext)
+  if (!config) {
+    return null
+  }
+
+  return (
+    <React.Fragment>
+      <Divider className={classes.channelInfoDivider} />
+      <SelectedChannelInfo channel={channel} />
+      <Divider className={classes.channelInfoDivider} />
+      <Messages channel={channel} />
+      <Divider className={classes.channelInfoDivider} />
+      <SelectedChannelStats channel={channel} />
+    </React.Fragment>
+  )
+}
 
 const SelectedChannel = ({ channel }) => {
   const classes = useStyles()

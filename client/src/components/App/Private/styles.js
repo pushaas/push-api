@@ -95,5 +95,19 @@ export const useStyles = () => {
     statsSubscribers: {
       flex: 1,
     },
+    messagesPre: {
+      padding: '5px',
+      backgroundColor: '#eee',
+      fontSize: '12px',
+      maxHeight: '200px',
+      minHeight: '100px',
+      overflowY: 'scroll',
+      textAlign: 'left',
+      whiteSpace: 'pre-wrap',
+    },
+    messagesNote: {
+      color: theme.palette.text.hint,
+      marginTop: '5px',
+    }
   }))()
 }
