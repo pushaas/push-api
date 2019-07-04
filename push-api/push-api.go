@@ -34,10 +34,11 @@ func Run() {
 			ctors.NewRedisClient,
 
 			// routers
-			ctors.NewRouter,
-			ctors.NewRootRouter,
+			ctors.NewGinRouter,
 			ctors.NewStaticRouter,
 			ctors.NewApiRootRouter,
+			ctors.NewAuthRouter,
+			ctors.NewConfigRouter,
 			ctors.NewChannelsRouter,
 			ctors.NewMessagesRouter,
 			ctors.NewStatsRouter,

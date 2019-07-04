@@ -126,7 +126,7 @@ func (r *channelsRouter) SetupRoutes(router gin.IRouter) {
 	router.GET("", r.getChannels)
 }
 
-func NewChannelsRouter(channelService services.ChannelService) routers.Router {
+func NewChannelsRouter(channelService services.ChannelService) ChannelsRouter {
 	return &channelsRouter{
 		channelService: channelService,
 	}

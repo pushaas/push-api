@@ -64,7 +64,7 @@ func (r *messagesRouter) SetupRoutes(router gin.IRouter) {
 	router.POST("", r.postMessage)
 }
 
-func NewMessagesRouter(publicationService services.PublicationService) routers.Router {
+func NewMessagesRouter(publicationService services.PublicationService) MessagesRouter {
 	return &messagesRouter{
 		publicationService: publicationService,
 	}

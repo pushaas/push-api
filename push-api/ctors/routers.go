@@ -40,12 +40,9 @@ func getAuthMiddleware(config *viper.Viper, logger *zap.Logger) gin.HandlerFunc 
 	return getNoAuthMiddleware(config, logger)
 }
 
-func NewRouter(
+func NewGinRouter(
 	config *viper.Viper,
 	logger *zap.Logger,
-
-	// root
-	rootRouter routers.RootRouter,
 
 	// static
 	staticRouter routers.StaticRouter,
@@ -54,7 +51,9 @@ func NewRouter(
 	apiRootRouter routers.ApiRootRouter,
 
 	// api v1
+	v1AuthRouter apiV1.AuthRouter,
 	v1ChannelsRouter apiV1.ChannelsRouter,
+	v1ConfigRouter apiV1.ConfigRouter,
 	v1MessagesRouter apiV1.MessagesRouter,
 	v1StatsRouter apiV1.StatsRouter,
 ) *gin.Engine {
@@ -63,17 +62,9 @@ func NewRouter(
 		gin.SetMode(gin.ReleaseMode)
 	}
 
-	r := gin.Default()
+	baseRouter := gin.Default()
 
-	g(r, "/", func(r gin.IRouter) {
-		rootRouter.SetupRoutes(r)
-	})
-
-	g(r, "/static", func(r gin.IRouter) {
-		staticRouter.SetupRoutes(r)
-	})
-
-	g(r, "/api", func(r gin.IRouter) {
+	g(baseRouter, "/api", func(r gin.IRouter) {
 		r.Use(getAuthMiddleware(config, logger))
 
 		g(r, "/", func(r gin.IRouter) {
@@ -81,8 +72,16 @@ func NewRouter(
 		})
 
 		g(r, "/v1", func(r gin.IRouter) {
+			g(r, "/auth", func(r gin.IRouter) {
+				v1AuthRouter.SetupRoutes(r)
+			})
+
 			g(r, "/channels", func(r gin.IRouter) {
 				v1ChannelsRouter.SetupRoutes(r)
+			})
+
+			g(r, "/config", func(r gin.IRouter) {
+				v1ConfigRouter.SetupRoutes(r)
 			})
 
 			g(r, "/messages", func(r gin.IRouter) {
@@ -95,19 +94,28 @@ func NewRouter(
 		})
 	})
 
-	return r
+	g(baseRouter, "/admin", func(r gin.IRouter) {
+		staticRouter.SetupRoutes(r)
+		staticRouter.SetupClientSideRoutesSupport(baseRouter)
+	})
+
+	return baseRouter
 }
 
-func NewRootRouter() routers.RootRouter {
-	return routers.NewRootRouter()
-}
-
-func NewStaticRouter() routers.StaticRouter {
-	return routers.NewStaticRouter()
+func NewStaticRouter(config *viper.Viper) routers.StaticRouter {
+	return routers.NewStaticRouter(config)
 }
 
 func NewApiRootRouter() routers.ApiRootRouter {
 	return routers.NewApiRootRouter()
+}
+
+func NewAuthRouter() apiV1.AuthRouter {
+	return apiV1.NewAuthRouter()
+}
+
+func NewConfigRouter(config *viper.Viper) apiV1.ConfigRouter {
+	return apiV1.NewConfigRouter(config)
 }
 
 func NewChannelsRouter(channelService services.ChannelService) apiV1.ChannelsRouter {

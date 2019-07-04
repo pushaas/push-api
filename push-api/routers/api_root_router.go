@@ -45,6 +45,6 @@ func (r *apiRootRouter) SetupRoutes(router gin.IRouter) {
 	router.GET("/healthcheck", r.getApiHealthcheck)
 }
 
-func NewApiRootRouter() Router {
+func NewApiRootRouter() ApiRootRouter {
 	return &apiRootRouter{}
 }

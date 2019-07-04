@@ -3,6 +3,7 @@ package services
 import (
 	"encoding/json"
 	"fmt"
+	"sort"
 	"time"
 
 	"github.com/go-redis/redis"
@@ -136,6 +137,10 @@ func (s *channelService) GetAll() ([]*models.Channel, ChannelRetrievalResult) {
 			channels[i] = &channel
 		}
 	}
+
+	sort.Slice(channels, func(i, j int) bool {
+		return channels[i].Created.String() < channels[j].Created.String()
+	})
 
 	return channels, ChannelRetrievalSuccess
 }
