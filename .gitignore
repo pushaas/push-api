@@ -1,6 +1,6 @@
 .idea
 dist
-#config/local.yml
+config/local.yml
 
 ### go ###
 
