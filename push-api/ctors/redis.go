@@ -21,7 +21,7 @@ func getRedisOptions(config *viper.Viper) (*redis.Options, error) {
 	}
 
 	if options.Addr == "" {
-		return nil, errors.New("redis address is required")
+		return nil, errors.New("redis URL is required")
 	}
 
 	return options, nil

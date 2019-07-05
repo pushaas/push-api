@@ -1,8 +1,2 @@
 api:
   enable_auth: true
-#  basic_auth_user:
-#  basic_auth_password:
-
-#redis:
-#  address:
-#  password:

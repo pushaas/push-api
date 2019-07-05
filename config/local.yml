@@ -1,7 +1,0 @@
-api:
-  enable_auth: true
-  basic_auth_user: tsuru
-  basic_auth_password: abc123
-
-redis:
-  url: "redis://localhost:6380"
