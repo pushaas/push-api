@@ -51,7 +51,7 @@ func (s *publicationService) PublishMessage(message *models.Message) PublishingR
 }
 
 func NewPublicationService(config *viper.Viper, logger *zap.Logger, redisClient redis.UniversalClient) PublicationService {
-	pubsubChannel := config.GetString("redis.pubsub-channels.publish")
+	pubsubChannel := config.GetString("redis.pubsub.channels.publish")
 
 	return &publicationService{
 		logger: logger.Named("publicationService"),
