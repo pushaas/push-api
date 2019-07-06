@@ -1,0 +1,8 @@
+.idea/
+.dockerignore
+dist/
+Dockerfile-dev
+Dockerfile-prod
+
+client/build
+client/node_modules

@@ -63,6 +63,7 @@ func setupFromDefaults(config *viper.Viper, env string) {
 	// api
 	config.SetDefault("api.enable_auth", true)
 	config.SetDefault("api.basic_auth_user", "app")
+	config.SetDefault("api.basic_auth_password", "abc123")
 	config.SetDefault("api.statics_path", "./client/build")
 
 	// push_stream

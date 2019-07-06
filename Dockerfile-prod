@@ -1,4 +1,6 @@
+########################################
 # stage 1: build go
+########################################
 FROM golang:1.12 as go-builder
 
 ENV GO111MODULE=on
@@ -12,23 +14,38 @@ RUN go mod download
 COPY . .
 
 RUN rm -fr ./dist && mkdir ./dist
-RUN cp ./config/prod.yml ./dist/config.yml
+RUN cp ./config/prod.yml ./dist/prod.yml
 RUN GOARCH=amd64 CGO_ENABLED=0 GOOS=linux make build
 
+########################################
+# stage 2: build web app
+########################################
+FROM node:10.16.0-alpine as web-builder
+
+WORKDIR /app
+
+COPY client/package.json .
+COPY client/yarn.lock .
+RUN yarn
+
+COPY ./client .
+RUN rm -fr build && yarn build
+
+RUN ls
+
+########################################
 # stage 3: run
+########################################
 FROM alpine:latest
 
 WORKDIR /app
 
 EXPOSE 9000
 
-ENV PUSHAAS_ENV=prod
-ENV PUSHAAS_CONFIG="./config.yml"
+ENV PUSHAPI_ENV=prod
 
-COPY --from=go-builder /app/dist/pushaas ./pushaas
-# TODO review this "config.yml", doesn't seem right
-COPY --from=go-builder /app/config/prod.yml ./config.yml
+COPY --from=go-builder /app/dist/push-api ./push-api
+COPY --from=go-builder /app/config/prod.yml ./config/prod.yml
+COPY --from=web-builder /app/build ./client/build
 
-# TODO pass AWS environment variables
-# TODO pass basic auth environment variables
-ENTRYPOINT ["/app/pushaas"]
+ENTRYPOINT ["/app/push-api"]
