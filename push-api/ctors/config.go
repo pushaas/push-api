@@ -62,14 +62,14 @@ func setupFromDefaults(config *viper.Viper, env string) {
 
 	// api
 	config.SetDefault("api.enable_auth", true)
-	config.SetDefault("api.statics_path", "./client/build")
 	config.SetDefault("api.basic_auth_user", "app")
+	config.SetDefault("api.statics_path", "./client/build")
 
 	// push_stream
-	config.SetDefault("push_stream.host", "localhost")
-	config.SetDefault("push_stream.port", "9080")
+	config.SetDefault("push_stream.url", "http://localhost:9080")
 
 	// redis
+	config.SetDefault("redis.url", "redis://localhost:6379")
 	config.SetDefault("redis.db.channel.prefix", "ch")
 	config.SetDefault("redis.db.stats_global.prefix", "stats_global")
 	config.SetDefault("redis.db.stats_channel.prefix", "stats_channel")
@@ -92,7 +92,6 @@ func setupFromEnvironment(config *viper.Viper) {
 	config.SetEnvPrefix("pushapi")
 	config.AutomaticEnv()
 }
-
 
 func NewViper() (*viper.Viper, error) {
 	env, err := getEnvVariable()

@@ -22,8 +22,7 @@ type (
 func (r *configRouter) getConfig(c *gin.Context) {
 	config := map[string]interface{}{
 		"pushStream": map[string]string {
-			"host": r.config.GetString("push_stream.host"),
-			"port": r.config.GetString("push_stream.port"),
+			"url": r.config.GetString("push_stream.url"),
 		},
 	}
 

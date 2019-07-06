@@ -9,8 +9,11 @@ COPY go.mod .
 COPY go.sum .
 RUN go mod download
 
-COPY . .
-
 EXPOSE 9000
 
-CMD ["go", "run", "push-api/main.go"]
+COPY . .
+
+ENV PUSHAPI_PUSH_STREAM__URL http://push-stream:9080
+ENV PUSHAPI_REDIS__URL redis://push-redis:6379
+
+CMD ["go", "run", "main.go"]

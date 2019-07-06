@@ -13,8 +13,8 @@ baseClient.interceptors.request.use((config) => ({
   }), (error) => Promise.reject(error))
 
 baseClient.interceptors.response.use(({ data }) => data, (error) => {
-    let message = 'unknown error'
-    if (error.response.data) {
+    let message = 'Unknown error'
+    if (error.response.data && error.response.data.message) {
       message = `${error.response.data.message} (error code ${error.response.data.code})`
     }
     console.error(message)
