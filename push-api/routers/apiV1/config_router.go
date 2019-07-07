@@ -2,10 +2,12 @@ package apiV1
 
 import (
 	"net/http"
+	"net/url"
 
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
 
+	"github.com/rafaeleyng/push-api/push-api/models"
 	"github.com/rafaeleyng/push-api/push-api/routers"
 )
 
@@ -20,9 +22,22 @@ type (
 )
 
 func (r *configRouter) getConfig(c *gin.Context) {
+	pushStreamUrl := r.config.GetString("push_stream.url")
+	parsedUrl, err := url.Parse(pushStreamUrl)
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, models.Error{
+			// TODO add remaining fields
+			Message: "failed to parse push-stream URL",
+		})
+		return
+	}
+
 	config := map[string]interface{}{
 		"pushStream": map[string]string {
-			"url": r.config.GetString("push_stream.url"),
+			"url": pushStreamUrl,
+			"hostname": parsedUrl.Hostname(),
+			"port": parsedUrl.Port(),
 		},
 	}
 
