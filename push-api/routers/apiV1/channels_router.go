@@ -114,6 +114,7 @@ func (r *channelsRouter) getChannels(c *gin.Context) {
 			// TODO add remaining fields
 			Message: "failed to retrieve channels",
 		})
+		return
 	}
 
 	c.JSON(http.StatusOK, channels)

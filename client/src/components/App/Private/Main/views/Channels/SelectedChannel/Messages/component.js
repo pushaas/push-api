@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
 import TextField from '@material-ui/core/TextField'
-import url from 'url'
 
 import dateService from 'services/dateService'
 import messagesService from 'services/messagesService'
@@ -47,10 +46,9 @@ const Messages = ({ channel }) => {
   }
 
   useEffect(() => {
-    const parsedUrl = url.parse(config.pushStream.url)
     const settings = {
-      host: parsedUrl.hostname,
-      port: parsedUrl.port,
+      host: config.pushStream.hostname,
+      port: config.pushStream.port,
       modes: 'eventsource',
       messagesPublishedAfter: 900,
       messagesControlByArgument: true,
