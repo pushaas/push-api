@@ -30,6 +30,7 @@ run:
 
 .PHONY: watch
 watch:
+	@-killall push-api
 	@realize start
 
 .PHONY: build-client
