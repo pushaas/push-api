@@ -2,6 +2,7 @@ package apiV1
 
 import (
 	"net/http"
+	"net/url"
 
 	"github.com/gin-gonic/gin"
 
@@ -26,6 +27,7 @@ func messageFromContext(c *gin.Context) (*models.Message, error) {
 	if err != nil {
 		return nil, err
 	}
+	message.Content = url.PathEscape(message.Content)
 	return &message, err
 }
 
