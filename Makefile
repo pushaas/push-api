@@ -28,9 +28,12 @@ build: clean
 run:
 	@go run main.go
 
-.PHONY: watch
-watch:
+.PHONY: kill
+kill:
 	@-killall push-api
+
+.PHONY: watch
+watch: kill
 	@realize start
 
 .PHONY: build-client
