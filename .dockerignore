@@ -1,8 +1,9 @@
 .idea/
-.dockerignore
 dist/
+config/local.yml
 Dockerfile-dev
 Dockerfile-prod
+Makefile
 
 client/build
 client/node_modules

@@ -83,7 +83,6 @@ docker-build-prod:
 .PHONY: docker-run-prod
 docker-run-prod: docker-clean-prod
 	@docker run \
-		-e PUSHAPI_PUSH_STREAM__URL="http://push-stream:9080" \
 		-e PUSHAPI_REDIS__URL="redis://push-redis:6379" \
 		-it \
 		--name=$(CONTAINER) \

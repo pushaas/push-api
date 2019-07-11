@@ -15,7 +15,7 @@ COPY . .
 
 RUN rm -fr ./dist && mkdir ./dist
 RUN cp ./config/prod.yml ./dist/prod.yml
-RUN GOARCH=amd64 CGO_ENABLED=0 GOOS=linux make build
+RUN GOARCH=amd64 CGO_ENABLED=0 GOOS=linux go build -o ./dist/push-api main.go
 
 ########################################
 # stage 2: build web app
@@ -30,8 +30,6 @@ RUN yarn
 
 COPY ./client .
 RUN rm -fr build && yarn build
-
-RUN ls
 
 ########################################
 # stage 3: run
