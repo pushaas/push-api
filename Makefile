@@ -8,6 +8,7 @@ PORT_HOST := 8080
 
 CONTAINER_DEV := $(CONTAINER)-dev
 IMAGE_DEV := rafaeleyng/$(CONTAINER_DEV)
+IMAGE_TAGGED_DEV := $(IMAGE_DEV):$(TAG)
 
 ########################################
 # app
@@ -53,7 +54,7 @@ docker-clean-dev:
 docker-build-dev:
 	@docker build \
 		-f Dockerfile-dev \
-		-t $(IMAGE_DEV):$(TAG) \
+		-t $(IMAGE_TAGGED_DEV) \
 		.
 
 .PHONY: docker-run-dev
@@ -63,7 +64,7 @@ docker-run-dev: docker-clean-dev
 		--name=$(CONTAINER_DEV) \
 		--network=$(NETWORK) \
 		-p $(PORT_HOST):$(PORT_CONTAINER) \
-		$(IMAGE_DEV):$(TAG)
+		$(IMAGE_TAGGED_DEV)
 
 .PHONY: docker-build-and-run-dev
 docker-build-and-run-dev: docker-build-dev docker-run-dev
@@ -77,7 +78,7 @@ docker-clean-prod:
 docker-build-prod:
 	@docker build \
 		-f Dockerfile-prod \
-		-t $(IMAGE):$(TAG) \
+		-t $(IMAGE_TAGGED) \
 		.
 
 .PHONY: docker-run-prod
@@ -88,7 +89,7 @@ docker-run-prod: docker-clean-prod
 		--name=$(CONTAINER) \
 		--network=$(NETWORK) \
 		-p $(PORT_HOST):$(PORT_CONTAINER) \
-		$(IMAGE):$(TAG)
+		$(IMAGE_TAGGED)
 
 .PHONY: docker-build-and-run-prod
 docker-build-and-run-prod: docker-build-prod docker-run-prod
@@ -96,4 +97,4 @@ docker-build-and-run-prod: docker-build-prod docker-run-prod
 .PHONY: docker-push-prod
 docker-push-prod: docker-build-prod
 	@docker push \
-		$(IMAGE):$(TAG)
+		$(IMAGE_TAGGED)
