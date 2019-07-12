@@ -23,7 +23,7 @@ type (
 func (r *statsRouter) handleStatsRequest(c *gin.Context, stats interface{}, result services.StatsRetrievalResult) {
 	if result == services.StatsRetrievalNotFound {
 		c.JSON(http.StatusNotFound, models.Error{
-			// TODO add remaining fields
+			Code: models.ErrorStatsGetNotFound,
 			Message: "stats data not found",
 		})
 		return
@@ -31,7 +31,7 @@ func (r *statsRouter) handleStatsRequest(c *gin.Context, stats interface{}, resu
 
 	if result == services.StatsRetrievalFailure {
 		c.JSON(http.StatusInternalServerError, models.Error{
-			// TODO add remaining fields
+			Code: models.ErrorStatsGetFailed,
 			Message: "failed to retrieve stats",
 		})
 		return

@@ -35,7 +35,7 @@ func (r *messagesRouter) postMessage(c *gin.Context) {
 	message, err := messageFromContext(c)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, models.Error{
-			// TODO add remaining fields
+			Code: models.ErrorMessageCreateInvalidBody,
 			Message: "invalid request body",
 		})
 		return
@@ -45,7 +45,7 @@ func (r *messagesRouter) postMessage(c *gin.Context) {
 
 	if result == services.PublishingFailure {
 		c.JSON(http.StatusInternalServerError, models.Error{
-			// TODO add remaining fields
+			Code: models.ErrorMessageCreateFailed,
 			Message: "could not send message",
 		})
 		return
@@ -53,7 +53,7 @@ func (r *messagesRouter) postMessage(c *gin.Context) {
 
 	if result == services.PublishingInvalid {
 		c.JSON(http.StatusBadRequest, models.Error{
-			// TODO add remaining fields
+			Code: models.ErrorMessageCreateInvalidMessageFormat,
 			Message: "invalid message format",
 		})
 		return

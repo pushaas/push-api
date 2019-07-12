@@ -33,7 +33,7 @@ func (r *channelsRouter) postChannel(c *gin.Context) {
 	channel, err := channelFromContext(c)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, models.Error{
-			// TODO add remaining fields
+			Code: models.ErrorChannelCreateInvalidBody,
 			Message: "invalid request body",
 		})
 		return
@@ -43,7 +43,7 @@ func (r *channelsRouter) postChannel(c *gin.Context) {
 
 	if result == services.ChannelCreationAlreadyExist {
 		c.JSON(http.StatusBadRequest, models.Error{
-			// TODO add remaining fields
+			Code: models.ErrorChannelCreateIdAlreadyExists,
 			Message: "a channel with this id already exists",
 		})
 		return
@@ -51,7 +51,7 @@ func (r *channelsRouter) postChannel(c *gin.Context) {
 
 	if result == services.ChannelCreationFailure {
 		c.JSON(http.StatusInternalServerError, models.Error{
-			// TODO add remaining fields
+			Code: models.ErrorChannelCreateFailed,
 			Message: "failed to create channel",
 		})
 		return
@@ -66,7 +66,7 @@ func (r *channelsRouter) getChannel(c *gin.Context) {
 
 	if result == services.ChannelRetrievalNotFound {
 		c.JSON(http.StatusNotFound, models.Error{
-			// TODO add remaining fields
+			Code: models.ErrorChannelGetNotFound,
 			Message: "channel not found",
 		})
 		return
@@ -74,7 +74,7 @@ func (r *channelsRouter) getChannel(c *gin.Context) {
 
 	if result == services.ChannelRetrievalFailure {
 		c.JSON(http.StatusInternalServerError, models.Error{
-			// TODO add remaining fields
+			Code: models.ErrorChannelGetFailed,
 			Message: "failed to retrieve channel",
 		})
 		return
@@ -89,7 +89,7 @@ func (r *channelsRouter) deleteChannel(c *gin.Context) {
 
 	if result == services.ChannelDeletionNotFound {
 		c.JSON(http.StatusNotFound, models.Error{
-			// TODO add remaining fields
+			Code: models.ErrorChannelDeleteNotFound,
 			Message: "channel not found",
 		})
 		return
@@ -97,7 +97,7 @@ func (r *channelsRouter) deleteChannel(c *gin.Context) {
 
 	if result == services.ChannelDeletionFailure {
 		c.JSON(http.StatusInternalServerError, models.Error{
-			// TODO add remaining fields
+			Code: models.ErrorChannelDeleteFailed,
 			Message: "failed to delete channel",
 		})
 		return
@@ -111,7 +111,7 @@ func (r *channelsRouter) getChannels(c *gin.Context) {
 
 	if result == services.ChannelRetrievalFailure {
 		c.JSON(http.StatusInternalServerError, models.Error{
-			// TODO add remaining fields
+			Code: models.ErrorChannelGetAllFailed,
 			Message: "failed to retrieve channels",
 		})
 		return

@@ -27,7 +27,7 @@ func (r *configRouter) getConfig(c *gin.Context) {
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, models.Error{
-			// TODO add remaining fields
+			Code: models.ErrorConfigGetParsePushStreamUrl,
 			Message: "failed to parse push-stream URL",
 		})
 		return
