@@ -39,7 +39,7 @@ const Login = () => {
     <Container component="main" maxWidth="xs">
       <div className={classes.paper}>
         <Typography component="h1" variant="h5">
-          PushApi Admin
+          Push API Admin
         </Typography>
         <form className={classes.form} noValidate onSubmit={login}>
           <TextField
