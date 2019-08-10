@@ -36,6 +36,7 @@ func NewRedisClient(config *viper.Viper, logger *zap.Logger) (redis.UniversalCli
 		return nil, err
 	}
 
+	log.Info("initializing redis with address", zap.String("addr", options.Addr))
 	client := redis.NewClient(options)
 	return client, nil
 }
