@@ -37,6 +37,10 @@ kill:
 watch: kill
 	@realize start
 
+.PHONY: setup-client
+setup-client:
+	@cd client && yarn
+
 .PHONY: build-client
 build-client:
 	@cd client && yarn build
