@@ -5,10 +5,10 @@ import (
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
 
-	"github.com/rafaeleyng/push-api/push-api/routers/apiV1"
-	"github.com/rafaeleyng/push-api/push-api/services"
+	"github.com/pushaas/push-api/push-api/routers/apiV1"
+	"github.com/pushaas/push-api/push-api/services"
 
-	"github.com/rafaeleyng/push-api/push-api/routers"
+	"github.com/pushaas/push-api/push-api/routers"
 )
 
 func g(router gin.IRouter, path string, groupFn func(r gin.IRouter)) {

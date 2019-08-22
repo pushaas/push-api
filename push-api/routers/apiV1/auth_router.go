@@ -3,7 +3,7 @@ package apiV1
 import (
 	"github.com/gin-gonic/gin"
 
-	"github.com/rafaeleyng/push-api/push-api/routers"
+	"github.com/pushaas/push-api/push-api/routers"
 )
 
 type (

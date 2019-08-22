@@ -8,8 +8,8 @@ import (
 	"go.uber.org/fx"
 	"go.uber.org/zap"
 
-	"github.com/rafaeleyng/push-api/push-api/ctors"
-	"github.com/rafaeleyng/push-api/push-api/workers"
+	"github.com/pushaas/push-api/push-api/ctors"
+	"github.com/pushaas/push-api/push-api/workers"
 )
 
 func runApp(logger *zap.Logger, router *gin.Engine, config *viper.Viper, persistentChannelsWorker workers.PersistentChannelsWorker) error {

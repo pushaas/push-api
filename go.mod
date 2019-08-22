@@ -1,4 +1,4 @@
-module github.com/rafaeleyng/push-api
+module github.com/pushaas/push-api
 
 go 1.12
 

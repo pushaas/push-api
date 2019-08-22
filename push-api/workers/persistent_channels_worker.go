@@ -10,7 +10,7 @@ import (
 	"go.uber.org/fx"
 	"go.uber.org/zap"
 
-	"github.com/rafaeleyng/push-api/push-api/services"
+	"github.com/pushaas/push-api/push-api/services"
 )
 
 type (

@@ -7,8 +7,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
 
-	"github.com/rafaeleyng/push-api/push-api/models"
-	"github.com/rafaeleyng/push-api/push-api/routers"
+	"github.com/pushaas/push-api/push-api/models"
+	"github.com/pushaas/push-api/push-api/routers"
 )
 
 type (

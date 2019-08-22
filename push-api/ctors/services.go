@@ -5,7 +5,7 @@ import (
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
 
-	"github.com/rafaeleyng/push-api/push-api/services"
+	"github.com/pushaas/push-api/push-api/services"
 )
 
 func NewPublicationService(config *viper.Viper, logger *zap.Logger, redisClient redis.UniversalClient) services.PublicationService {
