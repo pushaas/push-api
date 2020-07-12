@@ -1,7 +1,7 @@
 ########################################
 # stage 1: build go
 ########################################
-FROM golang:1.12 as go-builder
+FROM golang:1.14 as go-builder
 
 ENV GO111MODULE=on
 
